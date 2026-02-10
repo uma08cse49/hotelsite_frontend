@@ -119,7 +119,7 @@ export default function PlaceCard({ place }) {
 
  <Link
       to={`/place/${place._id}`}
-      className="w-[270px] flex-shrink-0 cursor-pointer"
+      className="w-[219px] flex-shrink-0 cursor-pointer"
     >
       {/* IMAGE */}
       <div className="relative aspect-square overflow-hidden rounded-2xl">
@@ -142,7 +142,9 @@ export default function PlaceCard({ place }) {
       </div>
 
       {/* TEXT */}
-      <div className="mt-1 space-y-0.5">
+      {/* <div className="mt-1 space-y-0.5"> */}
+      <div className="mt-[-2.5rem] space-y-0.5">
+      {/* <div className="mt-2 leading-tight"> */}
         <h3 className="text-sm font-semibold leading-tight truncate">
           {place.title}
         </h3>

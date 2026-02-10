@@ -1,263 +1,510 @@
-import React, { useEffect } from 'react';
-import { useContext, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+// import React, { useEffect, useRef } from 'react';
+// import { useContext, useState } from 'react';
+// import { Link, useLocation } from 'react-router-dom';
 
-import { useAuth } from '../../../hooks';
-import SearchBar from './SearchBar';
-import { Avatar, AvatarImage, AvatarFallback } from '@radix-ui/react-avatar';
+// import { useAuth } from '../../../hooks';
+// import SearchBar from './SearchBar';
+// import { Avatar, AvatarImage, AvatarFallback } from '@radix-ui/react-avatar';
 
-export const Header = () => {
-  const auth = useAuth();
-  const location = useLocation();
+// export const Header = () => {
+//   const auth = useAuth();
+//   const location = useLocation();
 
-  const [showSearchBar, setShowSearchBar] = useState(true);
-  const [hasShadow, setHasShadow] = useState(false);
-  const { user } = auth;
+//   const [showSearchBar, setShowSearchBar] = useState(true);
+//   const [hasShadow, setHasShadow] = useState(false);
+//   const { user } = auth;
 
-  const [isCompact, setIsCompact] = useState(false);
+//   const [isCompact, setIsCompact] = useState(false);
+//   const [activeTab, setActiveTab] = useState("homes");
+
+//   const [showLang, setShowLang] = useState(false);
+//   const [langTab, setLangTab] = useState("language"); // "language" | "currency"
+
+//   const langRef = useRef(null);
 
 
-  // const handleScroll = () => {
-  //   const shouldHaveShadow = window.scrollY > 0;
-  //   setHasShadow(shouldHaveShadow);
-  // };
+//   useEffect(() => {
+//   const handleClickOutside = (e) => {
+//     if (langRef.current && !langRef.current.contains(e.target)) {
+//       setShowLang(false);
+//     }
+//   };
 
-  const handleScroll = () => {
-  const scrollY = window.scrollY;
-  setHasShadow(scrollY > 0);
-  setIsCompact(scrollY > 80); // 👈 trigger animation
-};
+//   document.addEventListener("mousedown", handleClickOutside);
+//   return () => document.removeEventListener("mousedown", handleClickOutside);
+// }, []);
 
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
 
-    // hide searchbar based on url
-    if (location.pathname === '/') {
-      setShowSearchBar(true);
-    } else {
-      setShowSearchBar(false);
-    }
-    // clean up the event listener when the component is unmounted
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [location]);
 
-//   return (
-//     <header
-//       className={`fixed top-0 z-10 flex w-screen justify-center bg-white py-4 ${
-//         hasShadow ? 'shadow-md' : ''
-//       }`}
-//     >
-//       <div
-//         className={`flex ${
-//           showSearchBar ? 'justify-around' : 'justify-between px-10'
-//         } w-screen max-w-screen-xl`}
-//       >
-//         <a href="/" className="flex items-center gap-1">
+
+//   // const handleScroll = () => {
+//   //   const shouldHaveShadow = window.scrollY > 0;
+//   //   setHasShadow(shouldHaveShadow);
+//   // };
+
+//   const handleScroll = () => {
+//   const scrollY = window.scrollY;
+//   setHasShadow(scrollY > 0);
+//   setIsCompact(scrollY > 80); // 👈 trigger animation
+// };
+
+//   useEffect(() => {
+//     window.addEventListener('scroll', handleScroll);
+
+//     // hide searchbar based on url
+//     if (location.pathname === '/') {
+//       setShowSearchBar(true);
+//     } else {
+//       setShowSearchBar(false);
+//     }
+//     // clean up the event listener when the component is unmounted
+//     return () => {
+//       window.removeEventListener('scroll', handleScroll);
+//     };
+//   }, [location]);
+
+
+// return (
+//   <header className="sticky top-0 bg-white z-50 border-b transition-all duration-300">
+
+//     <div className="mx-auto max-w-screen-xl px-6">
+      
+
+//       {/* TOP ROW */}
+//       {/* <div className="relative flex h-20 items-center justify-between"> */}
+//        {/* <div className="grid grid-cols-3 items-center h-20"> */}
+//       {/* <div className="hidden md:grid grid-cols-3 items-center h-20 px-6"> */}
+//       <div className="hidden md:grid grid-cols-3 items-center h-20">
+
+//         {/* LEFT - LOGO */}
+//         <Link to="/" className="flex items-center gap-2">
 //           <img
 //             className="h-8 w-8 md:h-10 md:w-10"
 //             src="https://cdn-icons-png.flaticon.com/512/2111/2111320.png"
 //             alt=""
 //           />
-
 //           <span className="hidden text-2xl font-bold text-red-500 md:block">
-//             airbnb
+//             StayFactory
 //           </span>
-//         </a>
-
-//         {showSearchBar && <SearchBar />}
-
-//         <Link
-//           to={user ? '/account' : '/login'}
-//           className="w-50 flex h-full items-center gap-2 rounded-full border-gray-300 py-1 px-2 md:border"
-//         >
-//           <svg
-//             xmlns="http://www.w3.org/2000/svg"
-//             fill="none"
-//             viewBox="0 0 24 24"
-//             strokeWidth={1.5}
-//             stroke="currentColor"
-//             className="hidden h-6 w-6 md:block"
-//           >
-//             <path
-//               strokeLinecap="round"
-//               strokeLinejoin="round"
-//               d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-//             />
-//           </svg>
-
-//           <div className="z-10 h-[35px] w-[35px] overflow-hidden rounded-full">
-//             {user ? (
-//               <Avatar>
-//                 {user?.picture ? (
-//                   <AvatarImage src={user.picture} className="h-full w-full" />
-//                 ) : (
-//                   <AvatarImage
-//                     src="https://res.cloudinary.com/rahul4019/image/upload/v1695133265/pngwing.com_zi4cre.png"
-//                     className="h-full w-full"
-//                   />
-//                 )}
-//               </Avatar>
-//             ) : (
-//               <svg
-//                 fill="#858080"
-//                 version="1.1"
-//                 id="Layer_1"
-//                 xmlns="http://www.w3.org/2000/svg"
-//                 xmlnsXlink="http://www.w3.org/1999/xlink"
-//                 viewBox="796 796 200 200"
-//                 enableBackground="new 796 796 200 200"
-//                 xmlSpace="preserve"
-//                 stroke="#858080"
-//                 className="h-8 w-8"
-//               >
-//                 <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-//                 <g
-//                   id="SVGRepo_tracerCarrier"
-//                   strokeLinecap="round"
-//                   strokeLinejoin="round"
-//                 ></g>
-//                 <g id="SVGRepo_iconCarrier">
-//                   <path d="M896,796c-55.14,0-99.999,44.86-99.999,100c0,55.141,44.859,100,99.999,100c55.141,0,99.999-44.859,99.999-100 C995.999,840.86,951.141,796,896,796z M896.639,827.425c20.538,0,37.189,19.66,37.189,43.921c0,24.257-16.651,43.924-37.189,43.924 s-37.187-19.667-37.187-43.924C859.452,847.085,876.101,827.425,896.639,827.425z M896,983.86 c-24.692,0-47.038-10.239-63.016-26.695c-2.266-2.335-2.984-5.775-1.84-8.82c5.47-14.556,15.718-26.762,28.817-34.761 c2.828-1.728,6.449-1.393,8.91,0.828c7.706,6.958,17.316,11.114,27.767,11.114c10.249,0,19.69-4.001,27.318-10.719 c2.488-2.191,6.128-2.479,8.932-0.711c12.697,8.004,22.618,20.005,27.967,34.253c1.144,3.047,0.425,6.482-1.842,8.817 C943.037,973.621,920.691,983.86,896,983.86z"></path>{' '}
-//                 </g>
-//               </svg>
-//             )}
-//           </div>
 //         </Link>
-//       </div>
-//       <br className="border border-gray-600" />
+
+
+//         <div
+//             className={` hidden md:flex gap-10 transition-all duration-300 ease-out
+//             ${isCompact ? 'opacity-0 -translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'}
+//           `}
+//           >
+//             {/* HOMES */}
+//             <button
+//               onClick={() => setActiveTab("homes")}
+//               className={`flex flex-col items-center font-medium transition-colors
+//                 ${activeTab === "homes" ? "text-black" : "text-gray-500 hover:text-black"}
+//               `}
+//             >
+//               🏠
+//               <span>Homes</span>
+//               {activeTab === "homes" && (
+//                 <span className="mt-2 h-[2px] w-full bg-black"></span>
+//               )}
+//             </button>
+
+//             {/* EXPERIENCES */}
+//             <button
+//               onClick={() => setActiveTab("experiences")}
+//               className={`flex flex-col items-center font-medium transition-colors
+//                 ${activeTab === "experiences" ? "text-black" : "text-gray-500 hover:text-black"}
+//               `}
+//             >
+//               🎈
+//               <span>Experiences</span>
+//               {activeTab === "experiences" && (
+//                 <span className="mt-2 h-[2px] w-full bg-black"></span>
+//               )}
+//             </button>
+
+//             {/* SERVICES */}
+//             <button
+//               onClick={() => setActiveTab("services")}
+//               className={`flex flex-col items-center font-medium transition-colors
+//                 ${activeTab === "services" ? "text-black" : "text-gray-500 hover:text-black"}
+//               `}
+//             >
+//               🛎
+//               <span>Services</span>
+//               {activeTab === "services" && (
+//                 <span className="mt-2 h-[2px] w-full bg-black"></span>
+//               )}
+//             </button>
+
+
+//           </div>
+          
+//           <div className="flex justify-end items-center gap-3 relative">
+//             {/* Become a host */}
+//             <button className="text-sm font-medium px-4 py-2 rounded-full hover:bg-gray-100">
+//               Become a host
+//             </button>
+
+//             {/* Language / Currency */}
+//             <button
+//               onClick={() => setShowLang(true)}
+//               className="p-2 rounded-full hover:bg-gray-100"
+//             >
+//               🌐
+//             </button>
+
+//             {/* LANGUAGE MODAL */}
+//             {showLang && (
+//               <div
+//                 ref={langRef}
+//                 className="absolute right-0 top-[calc(100%+12px)]
+//                 bg-white rounded-2xl shadow-2xl border z-50 w-[420px]"
+//               >
+
+//               <div className="flex border-b px-6 pt-4">
+//                         <button
+//                           onClick={() => setLangTab("language")}
+//                           className={`pb-3 mr-6 font-medium transition
+//                             ${langTab === "language"
+//                               ? "border-b-2 border-black text-black"
+//                               : "text-gray-500 hover:text-black"}
+//                           `}
+//                         >
+//                           Language and region
+//                         </button>
+
+//                         <button
+//                           onClick={() => setLangTab("currency")}
+//                           className={`pb-3 font-medium transition
+//                             ${langTab === "currency"
+//                               ? "border-b-2 border-black text-black"
+//                               : "text-gray-500 hover:text-black"}
+//                           `}
+//                         >
+//                           Currency
+//                         </button>
+//                 </div>
+//                   <div>
+//                     {langTab === "language" && (
+//                       <div className="grid grid-cols-2 gap-4 p-6 max-h-[320px] overflow-y-auto">
+//                         {[
+//                           "English (India)",
+//                           "English (US)",
+//                           "हिन्दी",
+//                           "தமிழ்",
+//                           "తెలుగు",
+//                           "বাংলা",
+//                         ].map((lang) => (
+//                           <button
+//                             key={lang}
+//                             onClick={() => setShowLang(false)}
+//                             className="p-3 text-left rounded-xl hover:bg-gray-100"
+//                           >
+//                             <p className="font-medium">{lang}</p>
+//                             <p className="text-xs text-gray-500">India</p>
+//                           </button>
+//                         ))}
+//                       </div>
+//                     )}
+
+//                     {langTab === "currency" && (
+//                       <div className="grid grid-cols-2 gap-4 p-6 max-h-[320px] overflow-y-auto">
+//                         {[
+//                           { code: "INR", label: "Indian Rupee" },
+//                           { code: "USD", label: "US Dollar" },
+//                           { code: "EUR", label: "Euro" },
+//                           { code: "GBP", label: "British Pound" },
+//                           { code: "AUD", label: "Australian Dollar" },
+//                           { code: "CAD", label: "Canadian Dollar" },
+//                         ].map((c) => (
+//                           <button
+//                             key={c.code}
+//                             onClick={() => {
+//                               console.log("Currency selected:", c.code);
+//                               setShowLang(false);
+//                             }}
+//                             className="p-3 text-left rounded-xl hover:bg-gray-100"
+//                           >
+//                             <p className="font-medium">{c.label}</p>
+//                             <p className="text-xs text-gray-500">{c.code}</p>
+//                           </button>
+//                         ))}
+//                       </div>
+//                     )}
+//                   </div>
+
+
+
+
+//                 {/* PROFILE MENU — MUST BE HERE */}
+//                 <Link
+//                   to={user ? "/account" : "/login"}
+//                   className="flex items-center gap-2 border rounded-full px-3 py-2 cursor-pointer hover:shadow"
+//                 >
+//                   <svg
+//                     xmlns="http://www.w3.org/2000/svg"
+//                     fill="none"
+//                     viewBox="0 0 24 24"
+//                     strokeWidth={1.5}
+//                     stroke="currentColor"
+//                     className="h-6 w-6"
+//                   >
+//                     <path
+//                       strokeLinecap="round"
+//                       strokeLinejoin="round"
+//                       d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+//                     />
+//                   </svg>
+
+//                   <div className="h-[35px] w-[35px] overflow-hidden rounded-full bg-gray-400">
+//                     {user && (
+//                       <Avatar>
+//                         <AvatarImage src={user.picture} className="h-full w-full" />
+//                       </Avatar>
+//                     )}
+//                   </div>
+//                 </Link>
+//           </div>
+//         </div>
+    
+
+//         {showSearchBar && (
+//           <div
+//             className={`flex justify-center transition-all duration-300 ease-out
+//             ${isCompact ? 'pb-2 scale-95' : 'pb-6 scale-100'}
+//           `}
+//           >
+//             {/* <SearchBar compact={isCompact} /> */}
+//             <SearchBar compact={isCompact} activeTab={activeTab} />
+
+//         </div>
+//         )}
+//     </div>
 //     </header>
 //   );
+//   };
 
-return (
-  <header
-    className={`fixed top-0 z-10 w-full bg-white ${
-      hasShadow ? 'shadow-md' : ''
-    }`}
-  >
-    <div className="mx-auto max-w-screen-xl px-6">
-
-      {/* TOP ROW */}
-      <div className="relative flex h-20 items-center justify-between">
-
-        {/* LEFT - LOGO */}
-        <Link to="/" className="flex items-center gap-1">
-          <img
-            className="h-8 w-8 md:h-10 md:w-10"
-            src="https://cdn-icons-png.flaticon.com/512/2111/2111320.png"
-            alt=""
-          />
-          <span className="hidden text-2xl font-bold text-red-500 md:block">
-            StayFactory
-          </span>
-        </Link>
-
-        {/* CENTER - TABS */}
-        {/* <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex gap-10">
-          <button className="flex flex-col items-center font-semibold">
-            🏠
-            <span>Homes</span>
-            <span className="mt-2 h-[2px] w-full bg-black"></span>
-          </button>
-
-          <button className="flex flex-col items-center text-gray-500 hover:text-black">
-            🎈
-            <span>Experiences</span>
-          </button>
-
-          <button className="flex flex-col items-center text-gray-500 hover:text-black">
-            🛎
-            <span>Services</span>
-          </button>
-        </div> */}
-
-        <div
-          className={`absolute left-1/2 -translate-x-1/2 hidden md:flex gap-10 transition-all duration-300 ease-out
-          ${isCompact ? 'opacity-0 -translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'}
-        `}
-        >
-          <button className="flex flex-col items-center font-semibold">
-            🏠
-            <span>Homes</span>
-            <span className="mt-2 h-[2px] w-full bg-black"></span>
-          </button>
-
-          <button className="flex flex-col items-center text-gray-500 hover:text-black">
-            🎈
-            <span>Experiences</span>
-          </button>
-
-          <button className="flex flex-col items-center text-gray-500 hover:text-black">
-            🛎
-            <span>Services</span>
-          </button>
-        </div>
+// ===========================================================================================================
 
 
-        {/* RIGHT - PROFILE */}
-        <Link
-          to={user ? '/account' : '/login'}
-          className="flex items-center gap-2 rounded-full border px-3 py-1"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="hidden h-6 w-6 md:block"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useLocation , useNavigate} from "react-router-dom";
+import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
+import SearchBar from "./SearchBar";
+import { useAuth } from "../../../hooks";
+
+export const Header = () => {
+  const { user } = useAuth();
+  const location = useLocation();
+
+  const [showSearchBar, setShowSearchBar] = useState(true);
+  const [isCompact, setIsCompact] = useState(false);
+  const [activeTab, setActiveTab] = useState("homes");
+
+  const [showLang, setShowLang] = useState(false);
+  const [langTab, setLangTab] = useState("language");
+
+  const langRef = useRef(null);
+  const navigate = useNavigate();
+
+
+  /* ---------------- SCROLL EFFECT ---------------- */
+  useEffect(() => {
+    const onScroll = () => setIsCompact(window.scrollY > 80);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  /* ---------------- SHOW SEARCH ONLY ON HOME ---------------- */
+  useEffect(() => {
+    setShowSearchBar(location.pathname === "/");
+  }, [location.pathname]);
+
+  /* ---------------- CLOSE LANGUAGE ON OUTSIDE CLICK ---------------- */
+  useEffect(() => {
+    const handler = (e) => {
+      if (langRef.current && !langRef.current.contains(e.target)) {
+        setShowLang(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  return (
+    <header className="sticky top-0 z-50 bg-white border-b">
+      <div className="mx-auto max-w-screen-xl px-6">
+
+        {/* ================= TOP ROW ================= */}
+        <div className="grid grid-cols-3 items-center h-20">
+
+          {/* LEFT – LOGO */}
+          <Link to="/" className="flex items-center gap-2">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/2111/2111320.png"
+              className="h-8 w-8"
+              alt=""
             />
-          </svg>
+            <span className="hidden md:block text-2xl font-bold text-red-500">
+              StayFactory
+            </span>
+          </Link>
 
-          <div className="h-[35px] w-[35px] overflow-hidden rounded-full">
-            {user ? (
-              <Avatar>
-                <AvatarImage
-                  src={
-                    user.picture ||
-                    'https://res.cloudinary.com/rahul4019/image/upload/v1695133265/pngwing.com_zi4cre.png'
-                  }
-                  className="h-full w-full"
-                />
-              </Avatar>
-            ) : (
-              <svg
-                fill="#858080"
-                viewBox="796 796 200 200"
-                className="h-8 w-8"
+          {/* CENTER – TABS */}
+          <div
+            className={`hidden md:flex justify-center gap-10 transition-all duration-300
+              ${isCompact ? "opacity-0 -translate-y-4 pointer-events-none" : "opacity-100"}
+            `}
+          >
+            {["homes", "experiences", "services"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`flex flex-col items-center font-medium
+                  ${activeTab === tab ? "text-black" : "text-gray-500 hover:text-black"}
+                `}
               >
-                <path d="M896,796c-55.14,0-99.999,44.86-99.999,100c0,55.141,44.859,100,99.999,100c55.141,0,99.999-44.859,99.999-100C995.999,840.86,951.141,796,896,796z" />
-              </svg>
-            )}
+                <span className="capitalize">{tab}</span>
+                {activeTab === tab && (
+                  <span className="mt-2 h-[2px] w-full bg-black" />
+                )}
+              </button>
+            ))}
           </div>
-        </Link>
+
+          {/* RIGHT – HOST + LANGUAGE + PROFILE */}
+          <div className="flex justify-end items-center gap-3 relative">
+
+            {/* Become a host */}
+            {/* <Link to="/login">
+              <button className="text-sm font-medium px-4 py-2 rounded-full hover:bg-gray-100">
+                Become a host
+              </button>
+            </Link> */}
+
+            <button
+                onClick={() => {
+                  if (user) {
+                    navigate("/host");
+                  } else {
+                    navigate("/login");
+                  }
+                }}
+                className="text-sm font-medium px-4 py-2 rounded-full hover:bg-gray-100"
+              >
+                Become a host
+            </button>
+
+
+            {/* Language */}
+            <button
+              onClick={() => setShowLang((v) => !v)}
+              className="p-2 rounded-full hover:bg-gray-100"
+            >
+              🌐
+            </button>
+
+            {/* LANGUAGE / CURRENCY MODAL */}
+            {showLang && (
+              <div
+                ref={langRef}
+                className="absolute right-0 top-[calc(100%+12px)]
+                w-[420px] bg-white border rounded-2xl shadow-2xl z-50"
+              >
+                {/* Tabs */}
+                <div className="flex border-b px-6 pt-4">
+                  <button
+                    onClick={() => setLangTab("language")}
+                    className={`pb-3 mr-6 font-medium
+                      ${langTab === "language"
+                        ? "border-b-2 border-black"
+                        : "text-gray-500"}
+                    `}
+                  >
+                    Language & region
+                  </button>
+                  <button
+                    onClick={() => setLangTab("currency")}
+                    className={`pb-3 font-medium
+                      ${langTab === "currency"
+                        ? "border-b-2 border-black"
+                        : "text-gray-500"}
+                    `}
+                  >
+                    Currency
+                  </button>
+                </div>
+
+                {/* Content */}
+                {langTab === "language" && (
+                  <div className="grid grid-cols-2 gap-4 p-6 max-h-[300px] overflow-y-auto">
+                    {["English (India)", "English (US)", "हिन्दी", "தமிழ்"].map((l) => (
+                      <button
+                        key={l}
+                        onClick={() => setShowLang(false)}
+                        className="p-3 text-left rounded-xl hover:bg-gray-100"
+                      >
+                        <p className="font-medium">{l}</p>
+                        <p className="text-xs text-gray-500">India</p>
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {langTab === "currency" && (
+                  <div className="grid grid-cols-2 gap-4 p-6">
+                    {["INR", "USD", "EUR", "GBP"].map((c) => (
+                      <button
+                        key={c}
+                        onClick={() => setShowLang(false)}
+                        className="p-3 text-left rounded-xl hover:bg-gray-100"
+                      >
+                        <p className="font-medium">{c}</p>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* PROFILE */}
+            <Link
+              to={user ? "/account" : "/login"}
+              className="flex items-center gap-2 border rounded-full px-3 py-2 hover:shadow"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+
+              <div className="h-[35px] w-[35px] rounded-full overflow-hidden bg-gray-400">
+                {user && (
+                  <Avatar>
+                    <AvatarImage src={user.picture} className="h-full w-full" />
+                  </Avatar>
+                )}
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        {/* ================= SEARCH BAR ================= */}
+        {showSearchBar && (
+          <div
+            className={`flex justify-center transition-all duration-300
+              ${isCompact ? "pb-2 scale-95" : "pb-6 scale-100"}
+            `}
+          >
+            <SearchBar compact={isCompact} activeTab={activeTab} />
+          </div>
+        )}
+
       </div>
-
-      {/* SEARCH BAR ROW */}
-      {/* {showSearchBar && (
-        <div className="flex justify-center pb-4">
-          <SearchBar />
-        </div>
-      )} */}
-      {showSearchBar && (
-        <div
-          className={`flex justify-center transition-all duration-300 ease-out
-          ${isCompact ? 'pb-2 scale-95' : 'pb-6 scale-100'}
-        `}
-        >
-          <SearchBar compact={isCompact} />
-        </div>
-      )}
-
-    </div>
-  </header>
-);
-
+    </header>
+  );
 };
-
