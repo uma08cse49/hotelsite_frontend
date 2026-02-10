@@ -124,7 +124,182 @@
 
 // export default IndexPage;
 
+// ==================================================================================================
 
+// import { useContext } from "react";
+// import { PlaceContext } from "../providers/PlaceProvider";
+// import Spinner from "@/components/ui/Spinner";
+// import PlaceCard from "@/components/ui/PlaceCard";
+// import { useEffect, useState } from "react";
+// import axiosInstance from "@/utils/axios";
+
+
+// function IndexPage() {
+//   const { listings, loading} = useContext(PlaceContext);
+
+
+//   const [setPlaces] = useState([]);
+
+//   useEffect(() => {
+//     axiosInstance.get("/api/places").then((res) => {
+//       setPlaces(res.data);
+//       setLoading(false);
+//     });
+//   }, []);
+
+
+//   if (loading) return <Spinner />;
+
+//   const places = Array.isArray(listings) ? listings : [];
+
+  
+//   const sections = [
+//     {
+//       title: "Available next month in South Goa →",
+//       places: places.filter(p => p.address?.includes("Goa")),
+//     },
+//     {
+//       title: "Popular stays in Rajasthan →",
+//       places: places.filter(p => p.address?.includes("Rajasthan")),
+//     },
+//     {
+//       title: "Mountain cabins guests love →",
+//       places: places.filter(p => p.address?.includes("Manali")),
+//     },
+//   ];
+
+//   const defaultImage = "https://res.cloudinary.com/drgcw7tzn/image/upload/v1768310364/Airbnb/Places/wbdoog09idhaiynsxccq.jpg";
+
+// //   return (
+// //     // <div className="grid grid-cols-1 justify-items-center py-32 px-4 md:grid-cols-2 md:gap-0 lg:grid-cols-3 lg:gap-2 xl:grid-cols-4 xl:gap-10">
+// //     //   {places.length > 0 ? (
+// //     //     places.map((place) => (
+// //     //       // <PlaceCard place={place} key={place._id} />
+// //     //       <PlaceCard place={{ ...place, image: defaultImage }} key={place._id} />
+// //     //     ))
+// //     //   ) : (
+// //     //     <div className="absolute left-1/2 top-40 w-full -translate-x-1/2 p-10 md:w-1/2">
+// //     //       <h1 className="text-3xl font-semibold">Result not found!</h1>
+// //     //       <p className="text-lg font-semibold">
+// //     //         Sorry, we couldn&apos;t find the place you&apos;re looking for.
+// //     //       </p>
+// //     //     </div>
+// //     //   )}
+// //     // </div>
+// //   <div className="px-4">
+
+// //   {/* ===== SECTION HEADING ===== */}
+// //   <div className="mb-6 flex items-center justify-between">
+// //     <h2 className="text-xl font-semibold">
+// //       Available next month in Goa →
+// //     </h2>
+
+// //     <div className="flex gap-2">
+// //       <button className="rounded-full border p-2">‹</button>
+// //       <button className="rounded-full border p-2">›</button>
+// //     </div>
+// //   </div>
+
+// //   {/* ===== GRID ===== */}
+// //   <div className="grid grid-cols-1 justify-items-center
+// //                   md:grid-cols-2 md:gap-0
+// //                   lg:grid-cols-3 lg:gap-2
+// //                   xl:grid-cols-4 xl:gap-10">
+
+// //     {places.length > 0 ? (
+// //       places.map((place) => (
+// //         <PlaceCard
+// //           key={place._id}
+// //           place={{ ...place, image: defaultImage }}
+// //         />
+// //       ))
+// //     ) : (
+// //       <div className="col-span-full text-center py-32">
+// //         <h1 className="text-3xl font-semibold">Result not found!</h1>
+// //         <p className="text-lg font-semibold">
+// //           Sorry, we couldn&apos;t find the place you&apos;re looking for.
+// //         </p>
+// //       </div>
+// //     )}
+
+// //   </div>
+// // </div>
+
+// //   );
+
+
+// return (
+//   <div className="pt-40 space-y-16">
+
+//     {/* ===== SECTION HEADING ===== */}
+//     {/* <div className="mb-6 flex items-center justify-between">
+//       <h2 className="text-xl font-semibold text-black">
+//         Available next month in Goa →
+//       </h2>
+
+//       <div className="flex gap-2">
+//         <button className="rounded-full border px-3 py-1">‹</button>
+//         <button className="rounded-full border px-3 py-1">›</button>
+//       </div>
+//     </div> */}
+//     <div className="pt-40 space-y-16">
+
+//         {sections.map((section, idx) => (
+//           section.places.length > 0 && (
+//             <div key={idx}>
+//               {/* SECTION HEADING */}
+//               <div className="mb-4 px-4 flex items-center gap-2">
+//                 <h2 className="text-xl font-semibold">
+//                   {section.title}
+//                 </h2>
+//               </div>
+
+//               {/* HORIZONTAL SCROLL ROW */}
+//               <div className="flex gap-6 overflow-x-auto px-4 scrollbar-hide">
+//                 {section.places.map((place) => (
+//                   <div key={place._id} className="min-w-[260px]">
+//                     <PlaceCard place={place} />
+//                   </div>
+//                 ))}
+//               </div>
+//             </div>
+//           )
+//         ))}
+//       </div>
+
+
+//     {/* ===== GRID ===== */}
+//     <div className="grid grid-cols-1 justify-items-center
+//                     md:grid-cols-2 md:gap-0
+//                     lg:grid-cols-3 lg:gap-2
+//                     xl:grid-cols-4 xl:gap-10">
+
+//       {places.length > 0 ? (
+//         places.map((place) => (
+//           <PlaceCard
+//             key={place._id}
+//             place={{ ...place, image: defaultImage }}
+//           />
+//         ))
+//       ) : (
+//         <div className="col-span-full py-32 text-center">
+//           <h1 className="text-3xl font-semibold">Result not found!</h1>
+//           <p className="text-lg font-semibold">
+//             Sorry, we couldn&apos;t find the place you&apos;re looking for.
+//           </p>
+//         </div>
+//       )}
+//     </div>
+
+//   </div>
+// );
+
+// }
+
+
+// export default IndexPage;
+
+// =========================================================================================
 
 import { useContext } from "react";
 import { PlaceContext } from "../providers/PlaceProvider";
@@ -132,169 +307,62 @@ import Spinner from "@/components/ui/Spinner";
 import PlaceCard from "@/components/ui/PlaceCard";
 import { useEffect, useState } from "react";
 import axiosInstance from "@/utils/axios";
+import InspirationSection from "@/components/ui/InspirationSection";
 
+export default function IndexPage() {
+  const { listings = [], loading } = useContext(PlaceContext);
 
-function IndexPage() {
-  const { listings, loading} = useContext(PlaceContext);
+  if (loading) {
+    return <div className="p-10 text-center">Loading...</div>;
+  }
 
+  return (
+    
+    <div className="pt-[128px] px-6 space-y-14">
 
-  const [setPlaces] = useState([]);
+      <SectionRow
+        title="Available next month in South Goa →"
+        places={listings.slice(0, 5)}
+      />
 
-  useEffect(() => {
-    axiosInstance.get("/api/places").then((res) => {
-      setPlaces(res.data);
-      setLoading(false);
-    });
-  }, []);
+      <SectionRow
+        title="Popular homes in Bengaluru →"
+        places={listings.slice(5, 10)}
+      />
 
+      <SectionRow
+        title="Top-rated stays →"
+        places={listings.slice(10, 15)}
+      />
 
-  if (loading) return <Spinner />;
-
-  const places = Array.isArray(listings) ? listings : [];
-
-  
-  const sections = [
-    {
-      title: "Available next month in South Goa →",
-      places: places.filter(p => p.address?.includes("Goa")),
-    },
-    {
-      title: "Popular stays in Rajasthan →",
-      places: places.filter(p => p.address?.includes("Rajasthan")),
-    },
-    {
-      title: "Mountain cabins guests love →",
-      places: places.filter(p => p.address?.includes("Manali")),
-    },
-  ];
-
-  const defaultImage = "https://res.cloudinary.com/drgcw7tzn/image/upload/v1768310364/Airbnb/Places/wbdoog09idhaiynsxccq.jpg";
-
-//   return (
-//     // <div className="grid grid-cols-1 justify-items-center py-32 px-4 md:grid-cols-2 md:gap-0 lg:grid-cols-3 lg:gap-2 xl:grid-cols-4 xl:gap-10">
-//     //   {places.length > 0 ? (
-//     //     places.map((place) => (
-//     //       // <PlaceCard place={place} key={place._id} />
-//     //       <PlaceCard place={{ ...place, image: defaultImage }} key={place._id} />
-//     //     ))
-//     //   ) : (
-//     //     <div className="absolute left-1/2 top-40 w-full -translate-x-1/2 p-10 md:w-1/2">
-//     //       <h1 className="text-3xl font-semibold">Result not found!</h1>
-//     //       <p className="text-lg font-semibold">
-//     //         Sorry, we couldn&apos;t find the place you&apos;re looking for.
-//     //       </p>
-//     //     </div>
-//     //   )}
-//     // </div>
-//   <div className="px-4">
-
-//   {/* ===== SECTION HEADING ===== */}
-//   <div className="mb-6 flex items-center justify-between">
-//     <h2 className="text-xl font-semibold">
-//       Available next month in Goa →
-//     </h2>
-
-//     <div className="flex gap-2">
-//       <button className="rounded-full border p-2">‹</button>
-//       <button className="rounded-full border p-2">›</button>
-//     </div>
-//   </div>
-
-//   {/* ===== GRID ===== */}
-//   <div className="grid grid-cols-1 justify-items-center
-//                   md:grid-cols-2 md:gap-0
-//                   lg:grid-cols-3 lg:gap-2
-//                   xl:grid-cols-4 xl:gap-10">
-
-//     {places.length > 0 ? (
-//       places.map((place) => (
-//         <PlaceCard
-//           key={place._id}
-//           place={{ ...place, image: defaultImage }}
-//         />
-//       ))
-//     ) : (
-//       <div className="col-span-full text-center py-32">
-//         <h1 className="text-3xl font-semibold">Result not found!</h1>
-//         <p className="text-lg font-semibold">
-//           Sorry, we couldn&apos;t find the place you&apos;re looking for.
-//         </p>
-//       </div>
-//     )}
-
-//   </div>
-// </div>
-
-//   );
-
-
-return (
-  <div className="pt-40 space-y-16">
-
-    {/* ===== SECTION HEADING ===== */}
-    {/* <div className="mb-6 flex items-center justify-between">
-      <h2 className="text-xl font-semibold text-black">
-        Available next month in Goa →
-      </h2>
-
-      <div className="flex gap-2">
-        <button className="rounded-full border px-3 py-1">‹</button>
-        <button className="rounded-full border px-3 py-1">›</button>
-      </div>
-    </div> */}
-    <div className="pt-40 space-y-16">
-
-        {sections.map((section, idx) => (
-          section.places.length > 0 && (
-            <div key={idx}>
-              {/* SECTION HEADING */}
-              <div className="mb-4 px-4 flex items-center gap-2">
-                <h2 className="text-xl font-semibold">
-                  {section.title}
-                </h2>
-              </div>
-
-              {/* HORIZONTAL SCROLL ROW */}
-              <div className="flex gap-6 overflow-x-auto px-4 scrollbar-hide">
-                {section.places.map((place) => (
-                  <div key={place._id} className="min-w-[260px]">
-                    <PlaceCard place={place} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )
-        ))}
-      </div>
-
-
-    {/* ===== GRID ===== */}
-    <div className="grid grid-cols-1 justify-items-center
-                    md:grid-cols-2 md:gap-0
-                    lg:grid-cols-3 lg:gap-2
-                    xl:grid-cols-4 xl:gap-10">
-
-      {places.length > 0 ? (
-        places.map((place) => (
-          <PlaceCard
-            key={place._id}
-            place={{ ...place, image: defaultImage }}
-          />
-        ))
-      ) : (
-        <div className="col-span-full py-32 text-center">
-          <h1 className="text-3xl font-semibold">Result not found!</h1>
-          <p className="text-lg font-semibold">
-            Sorry, we couldn&apos;t find the place you&apos;re looking for.
-          </p>
-        </div>
-      )}
     </div>
-
-  </div>
-);
-
+  );
 }
 
+/* ========================= */
+function SectionRow({ title, places }) {
+  if (!places || places.length === 0) return null;
 
-export default IndexPage;
+  return (
+    <div>
+      {/* HEADING */}
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="text-2xl font-semibold">{title}</h2>
+
+        <div className="flex gap-2">
+          <button className="rounded-full bg-gray-100 p-2">◀</button>
+          <button className="rounded-full bg-gray-100 p-2">▶</button>
+        </div>
+      </div>
+
+      {/* ROW */}
+      <div className="flex gap-6 overflow-x-auto scrollbar-hide">
+        {places.map(place => (
+          <PlaceCard key={place._id} place={place} />
+        ))}
+      </div>
+    </div>  
+     
+  );
+ 
+}

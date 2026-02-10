@@ -1,12 +1,23 @@
 import React from 'react';
+import InspirationSection from "@/components/ui/InspirationSection";
 
 const Footer = () => {
   return (
     <div className="flex  w-full justify-center bg-gray-100 pb-8">
-      <div className="flex w-full max-w-screen-xl flex-col items-center px-6">
+      <div className="flex w-full max-w-screen-xl flex-col items-left px-6">
+
+         {/* 🔹 Inspiration Section (FULL WIDTH) */}
+        {/* <div className="max-w-7xl mx-auto px-6 py-12">
+          <InspirationSection />
+        </div> */}
+
+        <h2 className="text-2xl font-semibold mb-6 text-left">
+          <InspirationSection />
+        </h2>
+
         {/* grid for links */}
         <div className="grid  w-full grid-cols-1 gap-4 py-8 text-sm md:grid-cols-3 ">
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-3">
             <strong className="font-medium">Support</strong>
             <p>
               <span className="cursor-pointer font-normal text-gray-700 decoration-1 underline-offset-1 hover:underline">
@@ -44,7 +55,7 @@ const Footer = () => {
               </span>
             </p>
           </div>
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-3">
             <strong className="font-medium">Hosting</strong>
             <p>
               <span className="cursor-pointer font-normal text-gray-700 decoration-1 underline-offset-1 hover:underline">
@@ -72,7 +83,7 @@ const Footer = () => {
               </span>
             </p>
           </div>
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-3">
             <strong className="font-medium">Airbnb</strong>
             <p>
               <span className="cursor-pointer font-normal text-gray-700 decoration-1 underline-offset-1 hover:underline">
@@ -173,7 +184,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>  
     </div>
   );
 };
