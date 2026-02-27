@@ -86,29 +86,65 @@ const PlacesFormPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (!id) {
-      return;
-    }
-    setLoading(true);
-    axiosInstance.get(`/places/${id}`).then((response) => {
+// ==========================================================================
+
+  // useEffect(() => {
+  //   if (!id) {
+  //     return;
+  //   }
+  //   setLoading(true);
+  //   axiosInstance.get(`/places/${id}`).then((response) => {
+  //     const { place } = response.data;
+  //     // update the state of formData
+  //     for (let key in formData) {
+  //       if (place.hasOwnProperty(key)) {
+  //         setFormData((prev) => ({
+  //           ...prev,
+  //           [key]: place[key],
+  //         }));
+  //       }
+  //     }
+
+  //     // update photos state separately
+  //     setAddedPhotos([...place.photos]);
+
+  //     setLoading(false);
+  //   });
+  // }, [id]);
+
+// ==========================================================================
+
+useEffect(() => {
+  if (!id) return;
+
+  setLoading(true);
+
+  axiosInstance.get(`/api/admin/place/${id}`)
+    .then((response) => {
+
       const { place } = response.data;
-      // update the state of formData
-      for (let key in formData) {
-        if (place.hasOwnProperty(key)) {
-          setFormData((prev) => ({
-            ...prev,
-            [key]: place[key],
-          }));
-        }
+
+      if (!place) {
+        console.log("Place not found");
+        setLoading(false);
+        return;
       }
 
-      // update photos state separately
-      setAddedPhotos([...place.photos]);
+      setFormData((prev) => ({
+        ...prev,
+        ...place
+      }));
+
+      setAddedPhotos(place.photos || []);
 
       setLoading(false);
+    })
+    .catch((err) => {
+      console.log("Error loading place:", err);
+      setLoading(false);
     });
-  }, [id]);
+
+}, [id]);
 
   const preInput = (header, description) => {
     return (
@@ -125,6 +161,9 @@ const PlacesFormPage = () => {
     const formDataIsValid = isValidPlaceData();
     // console.log(isValidPlaceData());
     const placeData = { ...formData, addedPhotos };
+
+    console.log("Added Photos:", addedPhotos);
+    console.log("Length:", addedPhotos.length);
 
     // Make API call only if formData is valid
     if (formDataIsValid) {
