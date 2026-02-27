@@ -389,6 +389,15 @@ const SearchBar = ({ compact, activeTab = "homes" }) => {
   const [flexibleMonth, setFlexibleMonth] = useState(null);
   const [flexibleType, setFlexibleType] = useState(null);
   const [showGuests, setShowGuests] = useState(false);
+  const [tripLength, setTripLength] = useState(null);
+
+  const [flexMonths, setFlexMonths] = useState(2);
+  const [flexStartMonth, setFlexStartMonth] = useState(new Date());
+
+
+  // const [flexMonths, setFlexMonths] = useState(3);
+
+
 
   const [guests, setGuests] = useState({
     adults: 0,
@@ -574,23 +583,6 @@ useEffect(() => {
     setSelectedMonth(null);
   }
 }, [activeWhenTab]);
-
-
-  // useEffect(() => {
-  //   const handler = (e) => {
-  //     if (
-  //       whereRef.current &&
-  //       !whereRef.current.contains(e.target) &&
-  //       calendarRef.current &&
-  //       !calendarRef.current.contains(e.target)
-  //     ) {
-  //       setShowWhere(false);
-  //       setShowCalendar(false);
-  //     }
-  //   };
-  //   document.addEventListener("mousedown", handler);
-  //   return () => document.removeEventListener("mousedown", handler);
-  // }, []);
 
   /* ---------------- DATA ---------------- */
   const cities = [
@@ -780,6 +772,48 @@ const clearGuests = (e) => {
 
 
 
+const getFlexibleDateRange = () => {
+  const start = new Date(
+    flexStartMonth.getFullYear(),
+    flexStartMonth.getMonth(),
+    1
+  );
+
+  const end = new Date(
+    flexStartMonth.getFullYear(),
+    flexStartMonth.getMonth() + flexMonths,
+    1
+  );
+
+  return { start, end };
+};
+const formatDate = (date) => {
+  return date.toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
+};
+
+const { start, end } = getFlexibleDateRange();
+
+const increaseMonth = () => {
+  if (flexMonths < 12) setFlexMonths(prev => prev + 1);
+};
+
+const decreaseMonth = () => {
+  if (flexMonths > 1) setFlexMonths(prev => prev - 1);
+};
+
+useEffect(() => {
+  setFlexMonths(2);
+}, [flexStartMonth]);
+
+
+
+
+
+
   return (
     <header className="w-full">
       <div className={`flex justify-center ${compact ? "py-2" : "py-6"}`}>
@@ -811,7 +845,11 @@ const clearGuests = (e) => {
               {showSuggestions && (
                 <div
                   ref={dropdownRef}
-                  className="absolute left-0 top-[calc(100%+12px)] w-[360px] rounded-2xl bg-white shadow-xl border z-50 p-4"
+                  // className="absolute left-0 top-[calc(100%+12px)] w-[360px] rounded-2xl bg-white shadow-xl border z-50 p-4"
+                  className="absolute left-0 top-full mt-4 w-[380px]
+                  rounded-2xl bg-white shadow-xl border z-50 p-4
+                  max-h-[420px] overflow-y-auto
+                  scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
                 >
                   <button
                     onClick={handleNearby}
@@ -1102,15 +1140,22 @@ const clearGuests = (e) => {
 
 
                 {/* CALENDAR */}
+
                 {showCalendar && activeSection === "when" && (
                   <div
                     ref={calendarRef}
                     onClick={(e) => 
                       // e.preventDefault();
                       e.stopPropagation()}
-                    className="absolute top-[calc(100%+16px)] left-1/2 -translate-x-1/2
-                    bg-white rounded-3xl shadow-2xl border z-50 p-6
-                    animate-[fadeIn_0.25s_ease-out]"
+                    // className="absolute top-[calc(100%+16px)] left-1/2 -translate-x-1/2
+                    // bg-white rounded-3xl shadow-2xl border z-50 p-6
+                    // animate-[fadeIn_0.25s_ease-out]"
+
+                    className="
+                      absolute top-[calc(100%+16px)] left-1/2 -translate-x-1/2
+                      bg-white rounded-3xl shadow-2xl border z-50 p-6
+                      max-h-[70vh] overflow-y-auto
+                    "
                   >
                     {/* Airbnb tabs */}
                     {/* <div className="flex justify-center mb-6">
@@ -1339,6 +1384,191 @@ const clearGuests = (e) => {
                               })}
                             </div>
                           )}
+
+
+                          {/* {activeWhenTab === "months" && (
+  <div className="p-6 space-y-8"> */}
+
+    {/* MONTH CARDS - HORIZONTAL SCROLL */}
+    {/* <div className="flex gap-6 overflow-x-auto pb-4 scroll-smooth">
+      {Array.from({ length: 12 }).map((_, i) => {
+        const today = new Date();
+        const month = new Date(today.getFullYear(), today.getMonth() + i);
+
+        const isSelected =
+          selectedMonth &&
+          selectedMonth.getMonth() === month.getMonth() &&
+          selectedMonth.getFullYear() === month.getFullYear();
+
+        return (
+          <button
+            key={i}
+            onClick={() => {
+              setSelectedMonth(month);
+
+              setWhenLabel(
+                `${month.toLocaleString("default", {
+                  month: "long",
+                })} ${month.getFullYear()}`
+              );
+            }}
+            className={`min-w-[140px] h-[140px] rounded-2xl border flex flex-col items-center justify-center transition
+              ${
+                isSelected
+                  ? "border-black bg-gray-50 shadow"
+                  : "border-gray-200 hover:border-black"
+              }
+            `}
+          > */}
+            {/* Calendar circle icon placeholder */}
+            {/* <div className="w-14 h-14 rounded-full bg-gray-100 mb-4" />
+
+            <p className="font-medium text-sm">
+              {month.toLocaleString("default", { month: "long" })}
+            </p>
+            <p className="text-xs text-gray-500">
+              {month.getFullYear()}
+            </p>
+          </button>
+        );
+      })}
+    </div> */}
+
+    {/* TRIP LENGTH SELECTOR */}
+    {/* <div className="flex justify-center gap-3">
+      {["weekend", "week", "month"].map((option) => (
+        <button
+          key={option}
+          onClick={() => setTripLength(option)}
+          className={`px-6 py-2 rounded-full text-sm font-medium border transition
+            ${
+              tripLength === option
+                ? "bg-black text-white border-black"
+                : "border-gray-300 hover:border-black"
+            }
+          `}
+        >
+          {option.charAt(0).toUpperCase() + option.slice(1)}
+        </button>
+      ))}
+    </div> */}
+
+    {/* APPLY BUTTON (optional Airbnb behaviour) */}
+    {/* {selectedMonth && (
+      <div className="flex justify-end">
+        <button
+          onClick={() => {
+            setShowCalendar(false);
+            setActiveSection(null);
+          }}
+          className="bg-black text-white px-6 py-2 rounded-full text-sm font-medium"
+        >
+          Apply
+        </button>
+      </div>
+    )}
+  </div>
+)} */}
+
+{/* ======================================================================================= */}
+
+{/* <div className="flex flex-col items-center justify-center py-10">
+  <div className="relative w-[360px] h-[360px] flex items-center justify-center">
+    <svg className="absolute w-full h-full -rotate-90">
+        <circle
+          cx="180"
+          cy="180"
+          r="150"
+          stroke="#e5e7eb"
+          strokeWidth="22"
+          fill="transparent"
+        />
+        <circle
+          cx="180"
+          cy="180"
+          r="150"
+          stroke="url(#airbnbGradient)"
+          strokeWidth="22"
+          fill="transparent"
+          strokeLinecap="round"
+          strokeDasharray={2 * Math.PI * 150}
+          strokeDashoffset={
+            2 * Math.PI * 150 -
+            (flexMonths / 12) * (2 * Math.PI * 150)
+          }
+          className="transition-all duration-500 ease-out"
+        />
+
+        <defs>
+          <linearGradient id="airbnbGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#ff385c" />
+            <stop offset="100%" stopColor="#e61e4d" />
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <div
+        className="absolute w-10 h-10 bg-white rounded-full shadow-lg border border-gray-200 transition-all duration-300"
+        style={{
+          top: `${50 - 42 * Math.cos((flexMonths / 12) * 2 * Math.PI)}%`,
+          left: `${50 + 42 * Math.sin((flexMonths / 12) * 2 * Math.PI)}%`,
+          transform: "translate(-50%, -50%)",
+        }}
+      />
+        <div className="absolute w-[220px] h-[220px] rounded-full bg-white shadow-xl flex flex-col items-center justify-center">
+          <p className="text-6xl font-semibold text-gray-900">
+            {flexMonths}
+          </p>
+          <p className="text-lg text-gray-500 font-medium">
+            months
+          </p>
+        </div>
+
+        {Array.from({ length: 12 }).map((_, i) => {
+          const angle = (i / 12) * 2 * Math.PI;
+          return (
+            <div
+              key={i}
+              className="absolute w-2 h-2 bg-gray-400 rounded-full"
+              style={{
+                top: `${50 - 47 * Math.cos(angle)}%`,
+                left: `${50 + 47 * Math.sin(angle)}%`,
+                transform: "translate(-50%, -50%)",
+              }}
+            />
+          );
+        })}
+        <p className="mt-8 text-lg font-medium text-gray-800">
+          <span className="border-b border-gray-900">
+            {formatDate(start)}
+          </span>{" "}
+          to{" "}
+          <span className="border-b border-gray-900">
+            {formatDate(end)}
+          </span>
+        </p>
+        onClick={() => {
+           const firstDay = new Date(
+            month.getFullYear(),
+            month.getMonth(),
+            1
+          );
+          
+          setFlexStartMonth(firstDay);   // 🔥 Only this
+          setFlexMonths(2); */}
+
+        {/* // setFlexStartMonth(month);
+        // setSelectedMonth(month); */}
+      {/* }}
+
+</div>
+</div> */}
+{/* ============================================================================================== */}
+
+
+
+
+
 
 
                         {/* FLEXIBLE TAB */}
@@ -1599,6 +1829,7 @@ const clearGuests = (e) => {
                           <p className="font-medium">{item.label}</p>
                           <p className="text-xs text-gray-500">{item.desc}</p>
                         </div>
+                      
 
                         <div className="flex items-center gap-4">
                           <button

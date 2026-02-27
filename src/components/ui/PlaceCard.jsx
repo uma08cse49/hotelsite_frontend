@@ -129,11 +129,32 @@ export default function PlaceCard({ place }) {
           Guest favourite
         </div>
 
-        <Image
+        {/* <Image
           src={place.photos?.[0] || defaultImage}
           alt={place.title}
           className="h-full w-full object-cover"
+        /> */}
+       
+       {/* <Image
+          src={
+            place.photos?.length > 0
+              ? place.photos[0].url
+              : defaultImage
+          }
+          alt={place.title}
+          className="h-full w-full object-cover"
+        /> */}
+
+        <Image
+          src={
+            typeof place.photos?.[0] === "string"
+              ? place.photos[0]
+              : place.photos?.[0]?.url || defaultImage
+          }
+          alt={place.title}
+          className="h-full w-full object-cover"
         />
+        
 
         {/* Heart icon */}
         <button className="absolute right-3 top-3 z-10 rounded-full bg-white p-2 shadow">
@@ -142,8 +163,8 @@ export default function PlaceCard({ place }) {
       </div>
 
       {/* TEXT */}
-      {/* <div className="mt-1 space-y-0.5"> */}
-      <div className="mt-[-2.5rem] space-y-0.5">
+      <div className="mt-2 space-y-0.5">
+      {/* <div className="mt-[-2.5rem] space-y-0.5"> */}
       {/* <div className="mt-2 leading-tight"> */}
         <h3 className="text-sm font-semibold leading-tight truncate">
           {place.title}

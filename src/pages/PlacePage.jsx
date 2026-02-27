@@ -22,10 +22,17 @@ const PlacePage = () => {
     setLoading(true);
 
     const getPlace = async () => {
-      const { data } = await axiosInstance.get(`/places/${id}`);
-      setPlace(data.place);
+      // const { data } = await axiosInstance.get(`/places/${id}`);
+      const { data } = await axiosInstance.get(`/api/places/${id}`)
+
+        console.log("FULL API RESPONSE:", data);       // 👈 ADD
+        console.log("PLACE OBJECT:", data.place);      // 👈 ADD
+        // console.log("PHOTOS ARRAY:", data.place.photos); // 👈 ADD
+      // setPlace(data.place);
+      setPlace(data);
       setLoading(false);
     };
+    
     getPlace();
   }, [id]);
 
@@ -34,7 +41,7 @@ const PlacePage = () => {
   }
 
   if (!place) {
-    return;
+    return <div>This listing has been removed.</div>;
   }
 
   return (
@@ -70,3 +77,43 @@ const PlacePage = () => {
 };
 
 export default PlacePage;
+
+
+
+// import { useParams } from "react-router-dom";
+// import { useEffect, useState } from "react";
+// import axiosInstance from "../utils/axios";
+// import PlaceGallery from '@/components/ui/PlaceGallery';
+
+// const PlacePage = () => {
+//   const { id } = useParams();
+//   const [place, setPlace] = useState(null);
+
+//   useEffect(() => {
+//     axiosInstance.get(`/places/${id}`).then((response) => {
+//       setPlace(response.data);
+//     });
+//   }, [id]);
+
+//   if (!place) return <div>Loading...</div>;
+
+//   return (
+//     <div className="p-8 max-w-6xl mx-auto">
+//       <h1 className="text-3xl font-bold">{place.title}</h1>
+//       <p className="text-gray-500">{place.address}</p>
+
+//       <PlaceGallery place={place} />
+
+//       <div className="mt-6">
+//         <h2 className="text-xl font-semibold">Description</h2>
+//         <p>{place.description}</p>
+//       </div>
+
+//       <div className="mt-6 text-2xl font-bold">
+//         ₹ {place.price} / night
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default PlacePage;

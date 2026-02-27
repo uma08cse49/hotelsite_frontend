@@ -292,6 +292,12 @@ import { Link, useLocation , useNavigate} from "react-router-dom";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import SearchBar from "./SearchBar";
 import { useAuth } from "../../../hooks";
+import Lottie from "lottie-react";
+import homeAnimation from "../../assets/House.json";
+
+// import experienceAnimation from "../../assets/animations/experiences.json";
+import servicesAnimation from "../../assets/services.json";
+
 
 export const Header = () => {
   const { user } = useAuth();
@@ -306,6 +312,22 @@ export const Header = () => {
 
   const langRef = useRef(null);
   const navigate = useNavigate();
+
+  const tabAnimations = {
+  homes: homeAnimation,
+  // experiences: experienceAnimation,
+  services: servicesAnimation,
+};
+
+const iconScaleMap = {
+  homes: 1.2,
+  experiences: 1.3,
+  services: 1.6,
+};
+
+
+
+  
 
 
   /* ---------------- SCROLL EFFECT ---------------- */
@@ -351,7 +373,7 @@ export const Header = () => {
           </Link>
 
           {/* CENTER – TABS */}
-          <div
+          {/* <div
             className={`hidden md:flex justify-center gap-10 transition-all duration-300
               ${isCompact ? "opacity-0 -translate-y-4 pointer-events-none" : "opacity-100"}
             `}
@@ -369,8 +391,68 @@ export const Header = () => {
                   <span className="mt-2 h-[2px] w-full bg-black" />
                 )}
               </button>
+              
             ))}
-          </div>
+          </div> */}
+
+
+
+          <div
+  className={`hidden md:flex justify-center gap-10 transition-all duration-300
+    ${isCompact ? "opacity-0 -translate-y-4 pointer-events-none" : "opacity-100"}
+  `}
+>
+  {["homes", "experiences", "services"].map((tab) => (
+    <button
+      key={tab}
+      onClick={() => setActiveTab(tab)}
+      className={`flex items-center font-medium transition-colors
+        ${
+          activeTab === tab
+            ? "text-black"
+            : "text-gray-500 hover:text-black"
+        }
+      `}
+    >
+      {/* LOTTIE ICON */}
+      {/* <div className="w-12 h-12 flex items-center justify-center">
+        <Lottie
+          animationData={tabAnimations[tab]}
+          loop={activeTab === tab}
+          autoplay={activeTab === tab}
+          className="w-full h-full"
+           style={{ width: "100%", height: "100%", transform: "scale(1.4)" }}
+        />
+      </div> */}
+
+      {/* LOTTIE ICON */}
+<div className="w-12 h-12 flex items-center justify-center overflow-hidden">
+  <Lottie
+    animationData={tabAnimations[tab]}
+    loop={activeTab === tab}
+    autoplay={activeTab === tab}
+    style={{
+      width: "100%",
+      height: "100%",
+      transform: `scale(${(iconScaleMap[tab] || 1.3) + (activeTab === tab ? 0.2 : 0)})`,
+    }}
+  />
+</div>
+
+
+      {/* LABEL */}
+      <span className="capitalize text-sm ">
+        {tab}
+      </span>
+
+      {/* UNDERLINE */}
+      {/* {activeTab === tab && (
+        <span className="mt-2 h-[2px] w-full bg-black rounded-full" />
+      )} */}
+    </button>
+  ))}
+</div>
+
 
           {/* RIGHT – HOST + LANGUAGE + PROFILE */}
           <div className="flex justify-end items-center gap-3 relative">

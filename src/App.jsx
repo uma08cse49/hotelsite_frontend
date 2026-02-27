@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect,useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Slide, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -19,6 +19,8 @@ import { PlaceProvider } from './providers/PlaceProvider';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { getItemFromLocalStorage } from './utils';
 import NotFoundPage from './pages/NotFoundPage';
+import AdminDashboard from "./pages/AdminDashboard";
+
 
 function App() {
   useEffect(() => {
@@ -48,6 +50,8 @@ function App() {
                 element={<SingleBookedPlace />}
               />
               <Route path="*" element={<NotFoundPage />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+
             </Route>
           </Routes>
           <ToastContainer autoClose={2000} transition={Slide} />

@@ -300,14 +300,14 @@
 // export default IndexPage;
 
 // =========================================================================================
-
+import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { PlaceContext } from "../providers/PlaceProvider";
 import Spinner from "@/components/ui/Spinner";
 import PlaceCard from "@/components/ui/PlaceCard";
 import { useEffect, useState } from "react";
 import axiosInstance from "@/utils/axios";
-import InspirationSection from "@/components/ui/InspirationSection";
+
 
 export default function IndexPage() {
   const { listings = [], loading } = useContext(PlaceContext);
@@ -361,6 +361,15 @@ function SectionRow({ title, places }) {
           <PlaceCard key={place._id} place={place} />
         ))}
       </div>
+
+      {/* {places.map((place) => (
+        <Link to={`/place/${place._id}`} key={place._id}>
+          <div className="cursor-pointer">
+            <img src={place.photos?.[0]?.url} />
+            <h2>{place.title}</h2>
+          </div>
+        </Link>
+      ))} */}
     </div>  
      
   );

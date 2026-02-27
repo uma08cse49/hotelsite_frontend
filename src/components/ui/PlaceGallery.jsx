@@ -30,8 +30,9 @@ const PlaceGallery = ({ place }) => {
           {place?.photos?.length > 0 &&
             place.photos.map((photo, index) => (
               <div key={index} className="max-w-full">
+                console.log("PLACE PHOTOS:", place.photos);
                 {/* <Image src={photo} /> */}
-                <img src={photo} alt="" />
+                <img src={photo.url} alt="" />
               </div>
             ))}
         </div>
@@ -49,7 +50,7 @@ const PlaceGallery = ({ place }) => {
               <img
                 onClick={() => setShowAllPhotos(true)}
                 className="h-full w-full cursor-pointer object-cover"
-                src={place.photos[0]}
+                src={place.photos[0].url}
                 alt=""
               />
             </div>
@@ -65,7 +66,7 @@ const PlaceGallery = ({ place }) => {
                 <img
                   onClick={() => setShowAllPhotos(true)}
                   className="h-full w-full cursor-pointer object-cover"
-                  src={place.photos[1]}
+                  src={place.photos[1].url}
                   alt=""
                 />
               </div>
@@ -77,7 +78,7 @@ const PlaceGallery = ({ place }) => {
                 <img
                   onClick={() => setShowAllPhotos(true)}
                   className="h-full w-full cursor-pointer object-cover"
-                  src={place.photos[2]}
+                  src={place.photos[2].url}
                   alt=""
                 />
               </div>
@@ -94,7 +95,7 @@ const PlaceGallery = ({ place }) => {
                 <img
                   onClick={() => setShowAllPhotos(true)}
                   className="h-full w-full cursor-pointer object-cover"
-                  src={place.photos[3]}
+                  src={place.photos[3].url}
                   alt=""
                 />
               </div>
@@ -106,7 +107,7 @@ const PlaceGallery = ({ place }) => {
                 <img
                   onClick={() => setShowAllPhotos(true)}
                   className="h-full w-full cursor-pointer object-cover"
-                  src={place.photos[4]}
+                  src={place.photos[4].url}
                   alt=""
                 />
               </div>
@@ -122,7 +123,7 @@ const PlaceGallery = ({ place }) => {
             <img
               onClick={() => setShowAllPhotos(true)}
               className="h-full cursor-pointer object-cover"
-              src={place.photos[0]}
+              src={place.photos[0].url}
               alt=""
             />
           </div>

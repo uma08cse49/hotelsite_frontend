@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 import Image from './Image';
 import axiosInstance from '../../utils/axios';
 
-const PhotosUploader = ({ addedPhotos, setAddedPhotos }) => {
+const PhotosUploader = ({ placeId,addedPhotos, setAddedPhotos }) => {
   const [photoLink, setphotoLink] = useState('');
 
   const addPhotoByLink = async (e) => {
@@ -31,8 +32,49 @@ const PhotosUploader = ({ addedPhotos, setAddedPhotos }) => {
     });
   };
 
-  const removePhoto = (filename) => {
-    setAddedPhotos([...addedPhotos.filter((photo) => photo !== filename)]);
+
+//   const uploadPhoto = async (e) => {
+//   const files = e.target.files;
+//   const formData = new FormData();
+
+//   for (let i = 0; i < files.length; i++) {
+//     formData.append('photos', files[i]);
+//   }
+
+//   try {
+//     const { data } = await axiosInstance.post(
+//       `/api/admin/upload/${placeId}`,
+//       formData,
+//       {
+//         headers: { 'Content-Type': 'multipart/form-data' },
+//       }
+//     );
+
+//     // Backend already returns full updated photos array
+//     setAddedPhotos(data.photos);
+
+//     toast.success("Photos uploaded successfully!");
+
+//   } catch (err) {
+//     console.log("Upload error:", err);
+//     toast.error("Upload failed");
+//   }
+// };
+
+  // const removePhoto = (filename) => {
+  //   setAddedPhotos([...addedPhotos.filter((photo) => photo !== filename)]);
+  // };
+
+    const removePhoto = (photoToRemove) => {
+    setAddedPhotos(
+      addedPhotos.filter(
+        (photo) =>
+          (typeof photo === "string" ? photo : photo.url) !==
+          (typeof photoToRemove === "string"
+            ? photoToRemove
+            : photoToRemove.url)
+      )
+    );
   };
 
   const selectAsMainPhoto = (e, filename) => {
@@ -42,6 +84,16 @@ const PhotosUploader = ({ addedPhotos, setAddedPhotos }) => {
       filename,
       ...addedPhotos.filter((photo) => photo !== filename),
     ]);
+  //   setAddedPhotos([
+  //   selectedPhoto,
+  //   ...addedPhotos.filter(
+  //     (photo) =>
+  //       (typeof photo === "string" ? photo : photo.url) !==
+  //       (typeof selectedPhoto === "string"
+  //         ? selectedPhoto
+  //         : selectedPhoto.url)
+  //   ),
+  // ]);
   };
 
   return (
@@ -62,15 +114,22 @@ const PhotosUploader = ({ addedPhotos, setAddedPhotos }) => {
       </div>
       <div className="mt-2 grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-6 ">
         {addedPhotos?.length > 0 &&
-          addedPhotos.map((link) => (
-            <div className="relative flex h-32" key={link}>
+          // addedPhotos.map((link) => (
+          //   <div className="relative flex h-32" key={link}>
+          //     <Image
+          //       className="w-full rounded-2xl object-cover"
+          //       src={link}
+          //       alt=""
+          //     />
+          addedPhotos.map((photo, index) => (
+            <div className="relative flex h-32" key={photo.url || index}>
               <Image
                 className="w-full rounded-2xl object-cover"
-                src={link}
+                src={typeof photo === "string" ? photo : photo.url}
                 alt=""
-              />
+                />
               <button
-                onClick={() => removePhoto(link)}
+                onClick={() => removePhoto(photo)}
                 className="absolute bottom-1 right-1 cursor-pointer rounded-full bg-black bg-opacity-50 p-1 text-white hover:bg-opacity-70"
               >
                 <svg
