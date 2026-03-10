@@ -20,6 +20,8 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { getItemFromLocalStorage } from './utils';
 import NotFoundPage from './pages/NotFoundPage';
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminLogin from "./pages/AdminLogin";
+import AdminRoute from "./pages/AdminRoute";
 
 
 function App() {
@@ -50,7 +52,18 @@ function App() {
                 element={<SingleBookedPlace />}
               />
               <Route path="*" element={<NotFoundPage />} />
-              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin" element={<AdminLogin  />} />
+
+              <Route path="/admin/login" element={<AdminDashboard />} />
+
+              <Route
+                path="/admin/dashboard"
+                element={
+                  <AdminRoute>
+                    <AdminDashboard />
+                  </AdminRoute>
+                }
+              />
 
             </Route>
           </Routes>

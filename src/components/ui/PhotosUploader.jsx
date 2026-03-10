@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect } from 'react';
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import Image from './Image';
 import axiosInstance from '../../utils/axios';
+import { useParams } from "react-router-dom";
+import imageCompression from "browser-image-compression";
 
-const PhotosUploader = ({ placeId,addedPhotos, setAddedPhotos }) => {
+const PhotosUploader = ({ id,addedPhotos, setAddedPhotos }) => {
   const [photoLink, setphotoLink] = useState('');
 
   const addPhotoByLink = async (e) => {
@@ -17,21 +19,87 @@ const PhotosUploader = ({ placeId,addedPhotos, setAddedPhotos }) => {
     });
     setphotoLink('');
   };
+  
+  // const { id } = useParams(); // get id from URL
+  // const uploadPhoto = async (e) => {
+  //   const token = localStorage.getItem("adminToken");
+  //   const files = e.target.files;
+  //   const data = new FormData(); // creating new form data
+  //   for (let i = 0; i < files.length; i++) {
+  //     data.append('photos', files[i]); // adding all the photos to data one by one
+  //   }
+  //   // const { data: filenames } = await axiosInstance.post('/upload', data, {
+  //   // const { data: filenames } = await axiosInstance.post(`/api/admin/upload`, data, {
+  //   const response  = await axiosInstance.post(`/api/admin/upload/${id}`, data, {
+  //     headers: { 
+  //       Authorization: `Bearer ${token}`,
+  //       'Content-type': 'multipart/form-data' 
+  //     },
+  //   });
+  //   // setAddedPhotos((prev) => {
+  //   //   return [...prev, ...filenames];
+  //   // });
+  //   //  setAddedPhotos((prev) => [...prev, ...response.photos]);
+  //    setAddedPhotos(response.data.photos);
+  // };
+
+  useEffect(()=>{
+  console.log("Current Photos:", addedPhotos);
+},[addedPhotos]);
+
+
 
   const uploadPhoto = async (e) => {
-    const files = e.target.files;
-    const data = new FormData(); // creating new form data
-    for (let i = 0; i < files.length; i++) {
-      data.append('photos', files[i]); // adding all the photos to data one by one
-    }
-    const { data: filenames } = await axiosInstance.post('/upload', data, {
-      headers: { 'Content-type': 'multipart/form-data' },
-    });
-    setAddedPhotos((prev) => {
-      return [...prev, ...filenames];
-    });
-  };
+  const files = e.target.files;
 
+  const data = new FormData();
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+
+    const options = {
+      maxSizeMB: 1, // compress to max 1MB
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
+
+    try {
+
+      const compressedFile = await imageCompression(file, options);
+
+      console.log("Original size:", file.size / 1024 / 1024, "MB");
+      console.log("Compressed size:", compressedFile.size / 1024 / 1024, "MB");
+
+      data.append("photos", compressedFile);
+
+    } catch (error) {
+      console.log("Compression error:", error);
+    }
+    // data.append("photos", files[i]);
+  }
+
+  const token = localStorage.getItem("adminToken");
+
+  const uploadUrl = id ? `/api/admin/upload/${id}` : `/api/admin/upload`;
+
+  const response = await axiosInstance.post(
+    uploadUrl,
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  console.log("UPLOAD RESPONSE:", response.data);
+
+  // setAddedPhotos(response.data.photos);   // ✅ important
+
+  // setAddedPhotos((prev) => [...prev, ...response.data]);
+   setAddedPhotos((prev) => [...prev, ...response.data.photos]);
+};
 
 //   const uploadPhoto = async (e) => {
 //   const files = e.target.files;
@@ -65,17 +133,29 @@ const PhotosUploader = ({ placeId,addedPhotos, setAddedPhotos }) => {
   //   setAddedPhotos([...addedPhotos.filter((photo) => photo !== filename)]);
   // };
 
-    const removePhoto = (photoToRemove) => {
-    setAddedPhotos(
-      addedPhotos.filter(
-        (photo) =>
-          (typeof photo === "string" ? photo : photo.url) !==
-          (typeof photoToRemove === "string"
-            ? photoToRemove
-            : photoToRemove.url)
-      )
-    );
-  };
+  //   const removePhoto = (photoToRemove) => {
+  //   setAddedPhotos(
+  //     addedPhotos.filter(
+  //       (photo) =>
+  //         (typeof photo === "string" ? photo : photo.url) !==
+  //         (typeof photoToRemove === "string"
+  //           ? photoToRemove
+  //           : photoToRemove.url)
+  //     )
+  //   );
+  // };
+
+  const removePhoto = (photoToRemove) => {
+  setAddedPhotos((prev) =>
+    prev.filter(
+      (photo) =>
+        (typeof photo === "string" ? photo : photo.url) !==
+        (typeof photoToRemove === "string"
+          ? photoToRemove
+          : photoToRemove.url)
+    )
+  );
+};
 
   const selectAsMainPhoto = (e, filename) => {
     e.preventDefault();
@@ -147,8 +227,8 @@ const PhotosUploader = ({ placeId,addedPhotos, setAddedPhotos }) => {
                   />
                 </svg>
               </button>
-              <button
-                onClick={(e) => selectAsMainPhoto(e, link)}
+              {/* <button
+                onClick={(e) => selectAsMainPhoto(e, photo)}
                 className="absolute bottom-1 left-1 cursor-pointer rounded-full bg-black bg-opacity-50 p-1 text-white hover:bg-opacity-70"
               >
                 {link === addedPhotos[0] && (
@@ -182,7 +262,45 @@ const PhotosUploader = ({ placeId,addedPhotos, setAddedPhotos }) => {
                     />
                   </svg>
                 )}
-              </button>
+              </button> */}
+
+              <button
+  onClick={(e) => selectAsMainPhoto(e, photo)}
+  className="absolute bottom-1 left-1 cursor-pointer rounded-full bg-black bg-opacity-50 p-1 text-white hover:bg-opacity-70"
+>
+  {(typeof photo === "string" ? photo : photo.url) ===
+  (typeof addedPhotos[0] === "string"
+    ? addedPhotos[0]
+    : addedPhotos[0]?.url) ? (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="h-6 w-6"
+    >
+      <path
+        fillRule="evenodd"
+        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+        clipRule="evenodd"
+      />
+    </svg>
+  ) : (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="h-6 w-6"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+      />
+    </svg>
+  )}
+</button>
             </div>
           ))}
         <label className="flex h-32 cursor-pointer items-center justify-center gap-1 rounded-2xl border bg-transparent p-2 text-2xl text-gray-600">
