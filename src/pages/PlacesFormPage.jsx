@@ -119,10 +119,20 @@ useEffect(() => {
 
   setLoading(true);
 
-  axiosInstance.get(`/api/admin/place/${id}`)
+  const token = localStorage.getItem("adminToken");
+
+  
+
+  axiosInstance.get(`/api/admin/place/${id}`,{
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
     .then((response) => {
 
       const { place } = response.data;
+
+      console.log("FULL RESPONSE:", response.data);
 
       if (!place) {
         console.log("Place not found");
@@ -135,6 +145,9 @@ useEffect(() => {
         ...place
       }));
 
+      console.log("PHOTOS:", place.photos);
+
+
       setAddedPhotos(place.photos || []);
 
       setLoading(false);
@@ -144,7 +157,7 @@ useEffect(() => {
       setLoading(false);
     });
 
-}, [id]);
+}, []);
 
   const preInput = (header, description) => {
     return (
@@ -160,7 +173,10 @@ useEffect(() => {
 
     const formDataIsValid = isValidPlaceData();
     // console.log(isValidPlaceData());
-    const placeData = { ...formData, addedPhotos };
+    // const placeData = { ...formData, addedPhotos };
+    const placeData = { ...formData, photos: addedPhotos };
+    console.log("Saving photos:", addedPhotos);
+    console.log("placeData.....",placeData)
 
     console.log("Added Photos:", addedPhotos);
     console.log("Length:", addedPhotos.length);
@@ -171,7 +187,7 @@ useEffect(() => {
         // update existing place
         const { data } = await axiosInstance.put('/places/update-place', {
           id,
-          ...placeData,
+          ...placeData, 
         });
       } else {
         // new place
@@ -222,6 +238,8 @@ useEffect(() => {
         <PhotosUploader
           addedPhotos={addedPhotos}
           setAddedPhotos={setAddedPhotos}
+
+          id={id}
         />
 
         {preInput('Description', 'discription of the place')}
