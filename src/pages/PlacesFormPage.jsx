@@ -9,11 +9,24 @@ import Perks from '@/components/ui/Perks';
 import PhotosUploader from '@/components/ui/PhotosUploader';
 import Spinner from '@/components/ui/Spinner';
 
+import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+
+
+
+
+
+
 const PlacesFormPage = () => {
   const { id } = useParams();
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(false);
   const [addedPhotos, setAddedPhotos] = useState([]);
+  const queryClient = useQueryClient();
+  const [photoCategory, setPhotoCategory] = useState({});
+  
+
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     title: '',
@@ -114,50 +127,82 @@ const PlacesFormPage = () => {
 
 // ==========================================================================
 
-useEffect(() => {
-  if (!id) return;
+// useEffect(() => {
+//   if (!id) return;
 
-  setLoading(true);
+//   setLoading(true);
 
-  const token = localStorage.getItem("adminToken");
+//   const token = localStorage.getItem("adminToken");
 
   
 
-  axiosInstance.get(`/api/admin/place/${id}`,{
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-    .then((response) => {
+//   // axiosInstance.get(`/api/admin/place/${id}`,{
+//    axiosInstance.get(`/places/${id}`,{
+//     headers: {
+//       Authorization: `Bearer ${token}`
+//     }
+//   })
+//     .then((response) => {
 
-      const { place } = response.data;
+//       const { place } = response.data;
 
-      console.log("FULL RESPONSE:", response.data);
+//       console.log("FULL RESPONSE:", response.data);
 
-      if (!place) {
-        console.log("Place not found");
-        setLoading(false);
-        return;
-      }
+//       if (!place) {
+//         console.log("Place not found");
+//         setLoading(false);
+//         return;
+//       }
 
-      setFormData((prev) => ({
-        ...prev,
-        ...place
-      }));
-
-      console.log("PHOTOS:", place.photos);
+//       // setFormData((prev) => ({
+//       //   ...prev,
+//       //   ...place
+//       // }));
 
 
-      setAddedPhotos(place.photos || []);
+//       console.log("PHOTOS:", place.photos);
+//       setFormData(place);   // ⭐ important
 
-      setLoading(false);
-    })
-    .catch((err) => {
-      console.log("Error loading place:", err);
-      setLoading(false);
+//       setAddedPhotos(place.photos || []);
+
+//       setLoading(false);
+//     })
+//     .catch((err) => {
+//       console.log("Error loading place:", err);
+//       setLoading(false);
+//     });
+
+// }, []);
+
+
+
+
+useEffect(() => {
+  if (!id) return;
+
+  const fetchPlace = async () => {
+    const res = await axiosInstance.get(`/api/places/${id}`);
+
+    const place = res.data.place;
+
+    setFormData({
+      title: place.title || "",
+      address: place.address || "",
+      description: place.description || "",
+      perks: place.perks || [],
+      extraInfo: place.extraInfo || "",
+      checkIn: place.checkIn || "",
+      checkOut: place.checkOut || "",
+      maxGuests: place.maxGuests || 1
     });
 
-}, []);
+    setAddedPhotos(place.photos || []);
+  };
+
+  fetchPlace();
+}, [id]);
+
+
 
   const preInput = (header, description) => {
     return (
@@ -168,37 +213,113 @@ useEffect(() => {
     );
   };
 
-  const savePlace = async (e) => {
-    e.preventDefault();
+  // const savePlace = async (e) => {
+  //   e.preventDefault();
 
-    const formDataIsValid = isValidPlaceData();
-    // console.log(isValidPlaceData());
-    // const placeData = { ...formData, addedPhotos };
-    const placeData = { ...formData, photos: addedPhotos };
-    console.log("Saving photos:", addedPhotos);
-    console.log("placeData.....",placeData)
+  //   const formDataIsValid = isValidPlaceData();
+  //   // console.log(isValidPlaceData());
+  //   // const placeData = { ...formData, addedPhotos };
+  //   const placeData = { ...formData, photos: addedPhotos };
 
-    console.log("Added Photos:", addedPhotos);
-    console.log("Length:", addedPhotos.length);
+  //   console.log("Saving photos:", addedPhotos);
+  //   console.log("placeData.....",placeData)
 
-    // Make API call only if formData is valid
-    if (formDataIsValid) {
-      if (id) {
-        // update existing place
-        const { data } = await axiosInstance.put('/places/update-place', {
-          id,
-          ...placeData, 
-        });
-      } else {
-        // new place
-        const { data } = await axiosInstance.post(
-          '/places/add-places',
-          placeData,
-        );
-      }
-      setRedirect(true);
-    }
+  //   console.log("Added Photos:", addedPhotos);
+  //   console.log("Length:", addedPhotos.length);
+
+  //   // Make API call only if formData is valid
+  //   if (formDataIsValid) {
+  //     if (id) {
+  //       // update existing place
+  //       const { data } = await axiosInstance.put('/places/update-place', {
+  //         id,
+  //         ...placeData, 
+  //       });
+  //     } else {
+  //       // new place
+  //       const { data } = await axiosInstance.post(
+  //         '/places/add-places',
+  //         placeData,
+  //       );
+  //     }
+  //     setRedirect(true);
+  //   }
+  // };
+
+
+
+ const savePlace = async (e) => {
+  e.preventDefault();
+
+  const formDataIsValid = isValidPlaceData();
+  if (!formDataIsValid) return;
+
+  const placeData = {
+    title,
+    address,
+    description,
+    perks,
+    extraInfo,
+    maxGuests,
+    price,
+    photos: addedPhotos,
   };
+
+  console.log("Submitting placeData:", placeData);
+
+  try {
+    let response;
+
+    if (id) {
+      // UPDATE PLACE
+      response = await axiosInstance.put(`/api/places/${id}`, placeData);
+
+      console.log("Updated Place:", response.data);
+
+      alert("Place updated successfully");
+
+    } else {
+      // CREATE PLACE
+      response = await axiosInstance.post("/api/places", placeData);
+
+      console.log("Created Place:", response.data);
+
+      alert("Place created successfully");
+    }
+
+    // Refresh places list using React Query
+    queryClient.invalidateQueries({ queryKey: ["places"] });
+
+    // Redirect back to places page
+    navigate("/account/places");
+
+  } catch (error) {
+    console.error("Error saving place:", error);
+  }
+};
+
+// const savePlace = async (e) => {
+//   e.preventDefault();
+
+//   const placeData = {
+//     title,
+//     address,
+//     description,
+//     perks,
+//     extraInfo,
+//     maxGuests,
+//     price,
+//     photos: addedPhotos
+//   };
+
+//   if (id) {
+//     await axiosInstance.put(`/api/places/update-place/${id}`, placeData);
+//   } else {
+//     await axiosInstance.post("/api/places", placeData);
+//   }
+// };
+
+
 
   if (redirect) {
     return <Navigate to={'/account/places'} />;
@@ -216,21 +337,38 @@ useEffect(() => {
           'Title',
           'title for your place. Should be short and catchy as in advertisement',
         )}
-        <input
+        {/* <input
           type="text"
           name="title"
           value={title}
           onChange={handleFormData}
           placeholder="title, for example: My lovely apt"
+        /> */}
+
+        <input
+          type="text"
+          value={formData.title}
+          onChange={(e) =>
+            setFormData({ ...formData, title: e.target.value })
+          }
+          placeholder="title, for example: My lovely apt"
         />
 
         {preInput('Address', 'address to this place')}
-        <input
+        {/* <input
           type="text"
           name="address"
           value={address}
           onChange={handleFormData}
           placeholder="address"
+        /> */}
+
+        <input
+          type="text"
+          value={formData.address}
+          onChange={(e) =>
+            setFormData({ ...formData, address: e.target.value })
+          }
         />
 
         {preInput('Photos', 'more = better')}
@@ -238,9 +376,26 @@ useEffect(() => {
         <PhotosUploader
           addedPhotos={addedPhotos}
           setAddedPhotos={setAddedPhotos}
-
           id={id}
         />
+        <select
+          value={photoCategory[id] || ""}
+          onChange={(e) =>
+            setPhotoCategory((prev) => ({
+              ...prev,
+              [id]: e.target.value,
+            }))
+          }
+          className="border rounded p-2 mb-2"
+        >
+          <option value="">Select category</option>
+          <option value="Living room">Living room</option>
+          <option value="Bedroom">Bedroom</option>
+          <option value="Kitchen">Kitchen</option>
+          <option value="Bathroom">Bathroom</option>
+        </select>
+
+        
 
         {preInput('Description', 'discription of the place')}
         <textarea

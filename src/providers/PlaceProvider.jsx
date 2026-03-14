@@ -92,7 +92,8 @@ export function PlaceProvider({ children }) {
       .then(res => res.json())
       .then(data => {
         console.log("Places from API:", data); // 🔥 DEBUG LINE
-        setListings(data);
+        // setListings(data);
+        setListings(data.places || data); 
         setLoading(false);
       })
       // .catch(() => setLoading(false));

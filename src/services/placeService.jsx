@@ -51,6 +51,8 @@ export const uploadPlacePhotos = async (placeId, files, token) => {
       },
     }
   );
+
+  
   console.log("Files being sent:", response.data);
 
   return response.data;

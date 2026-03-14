@@ -1,46 +1,247 @@
 import React, { useState } from 'react';
+import { Link } from "react-router-dom";
+import { useRef } from "react";
+
 
 const PlaceGallery = ({ place }) => {
+
   const [showAllPhotos, setShowAllPhotos] = useState(false);
 
+  const sectionRefs = useRef({});
+
+  const [activeCategory, setActiveCategory] = useState("");
+
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+
+  const scrollToSection = (category) => {
+
+  sectionRefs.current[category]?.scrollIntoView({
+    behavior: "smooth"
+  });
+
+  const handleScroll = () => {
+
+    const sections = Object.keys(sectionRefs.current);
+
+    sections.forEach((category) => {
+
+      const section = sectionRefs.current[category];
+
+      if (!section) return;
+
+      const rect = section.getBoundingClientRect();
+
+      if (rect.top <= 200 && rect.bottom >= 200) {
+        setActiveCategory(category);
+      }
+
+    });
+    window.addEventListener("scroll", handleScroll);
+
+  return () => window.removeEventListener("scroll", handleScroll);
+
+}
+  };
+  
+
   if (showAllPhotos) {
+
+    const groupedPhotos = place.photos.reduce((acc, photo) => {
+
+    const category = photo.category || "Other";
+
+    if (!acc[category]) acc[category] = [];
+
+    acc[category].push(photo);
+
+    return acc;
+
+  }, {});
+
     return (
-      <div className="fixed inset-0 z-20 overflow-auto bg-white text-white">
-        <div className="grid gap-4 bg-white px-2 py-20 md:p-8">
-          <div>
-            <button
-              className="fixed right-2 top-8 flex gap-1 rounded-2xl bg-white py-2 px-4 text-black shadow-sm shadow-gray-500 md:right-12"
-              onClick={() => setShowAllPhotos(false)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="h-6 w-6"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              Close photos
-            </button>
-          </div>
-          {place?.photos?.length > 0 &&
-            place.photos.map((photo, index) => (
-              <div key={index} className="max-w-full">
-                console.log("PLACE PHOTOS:", place.photos);
-                {/* <Image src={photo} /> */}
-                <img src={photo.url} alt="" />
-              </div>
-            ))}
+    //   <div className="fixed inset-0 z-20 overflow-auto bg-white text-white">
+    //     {/* <div className="grid gap-4 bg-white px-2 py-20 md:p-8"> */}
+    //     <div className="grid gap-6 bg-white px-4 py-24 md:px-20">
+    //       <div>
+    //         <button
+    //           className="fixed right-2 top-8 flex gap-1 rounded-2xl bg-white py-2 px-4 text-black shadow-sm shadow-gray-500 md:right-12"
+    //           onClick={() => setShowAllPhotos(false)}
+    //         >
+    //           <svg
+    //             xmlns="http://www.w3.org/2000/svg"
+    //             viewBox="0 0 24 24"
+    //             fill="currentColor"
+    //             className="h-6 w-6"
+    //           >
+    //             <path
+    //               fillRule="evenodd"
+    //               d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
+    //               clipRule="evenodd"
+    //             />
+    //           </svg>
+    //           Close photos
+    //         </button>
+    //       </div>
+    //       {place?.photos?.length > 0 &&
+    //         place.photos.map((photo, index) => (
+    //           <div key={index} className="max-w-full">
+    //             {/* <Image src={photo} /> */}
+    //             {/* <img src={photo.url} alt="" /> */}
+    //             <img
+    //               src={photo.url}
+    //               alt=""
+    //               className="w-full rounded-xl object-cover"
+    //             />
+    //           </div>
+    //         ))}
+    //     </div>
+    //   </div>
+
+  //   <div className="fixed inset-0 z-50 overflow-auto bg-white">
+
+  //     <button
+  //       className="fixed right-6 top-6 bg-white px-4 py-2 rounded-xl shadow"
+  //       onClick={() => setShowAllPhotos(false)}
+  //     >
+  //       Close photos
+  //     </button>
+
+  //     <div className="max-w-6xl mx-auto pt-24 px-6">
+
+  //       {Object.entries(groupedPhotos).map(([category, photos]) => (
+
+  //         <div key={category} className="mb-16">
+
+  //           {/* CATEGORY TITLE */}
+  //           <h2 className="text-2xl font-semibold mb-6">
+  //             {category}
+  //           </h2>
+
+  //           {/* PHOTO GRID */}
+  //           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+
+  //             {photos.map((photo, index) => (
+
+  //               <img
+  //                 key={index}
+  //                 src={photo.url}
+  //                 className="rounded-xl w-full object-cover"
+  //               />
+
+  //             ))}
+
+  //           </div>
+
+  //         </div>
+
+  //       ))}
+
+  //     </div>
+
+  //   </div>
+
+  <div className="fixed inset-0 z-50 bg-white overflow-auto">
+
+  <button
+    className="fixed right-6 top-6 bg-white px-4 py-2 rounded-xl shadow"
+    onClick={() => setShowAllPhotos(false)}
+  >
+    Close photos
+  </button>
+
+  <div className="max-w-7xl mx-auto pt-24 flex gap-12">
+
+    {/* LEFT SIDEBAR */}
+    <div className="w-56 sticky top-24 h-fit">
+
+      {Object.keys(groupedPhotos).map((category) => (
+
+        <div
+          key={category}
+          onClick={() => scrollToSection(category)}
+          // className="cursor-pointer py-2 text-gray-700 hover:underline"
+          // className="cursor-pointer py-2 text-gray-700 hover:underline hover:text-black"
+          className={`cursor-pointer py-2 transition
+            ${activeCategory === category
+              ? "font-semibold text-black"
+              : "text-gray-500 hover:text-black"}
+          `}
+        >
+          {category}
         </div>
-      </div>
+
+      ))}
+
+    </div>
+
+
+    {/* RIGHT PHOTO SECTIONS */}
+    <div className="flex-1">
+
+      {Object.entries(groupedPhotos).map(([category, photos]) => (
+
+        <div
+          key={category}
+          ref={(el) => (sectionRefs.current[category] = el)}
+          className="mb-16"
+        >
+
+          <h2 className="text-2xl font-semibold mb-6">
+            {category} · {photos.length} photos
+          </h2>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+
+            {photos.map((photo, index) => (
+
+              <img
+                key={index}
+                src={photo.url}
+                className="rounded-xl w-full object-cover"
+                onClick={() => setSelectedPhoto(photo.url)}
+              />
+
+            ))}
+
+          </div>
+
+          {selectedPhoto && (
+            
+              <div className="fixed inset-0 z-[100] bg-black bg-opacity-90 flex items-center justify-center">
+
+                <button
+                  className="absolute top-6 right-6 text-white text-2xl"
+                  onClick={() => setSelectedPhoto(null)}
+                >
+                  ✕
+                </button>
+
+                <img
+                  src={selectedPhoto}
+                  className="max-h-[90vh] max-w-[90vw] object-contain"
+                />
+
+              </div>
+
+            )}
+
+        </div>
+
+      ))}
+
+    </div>
+
+  </div>
+
+</div>
+
     );
   }
+
+  
+
   return (
-    <div className="relative">
+    <div className="relative cursor-pointer">
       {/* Medium devices */}
       <div className="hidden h-[400px] max-h-[450px] grid-cols-4 gap-2 overflow-hidden rounded-[12px] md:grid">
         {/* column 1 */}
@@ -70,6 +271,7 @@ const PlaceGallery = ({ place }) => {
                   alt=""
                 />
               </div>
+              
             )}
 
             {place.photos?.[2] && (

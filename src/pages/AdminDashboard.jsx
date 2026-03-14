@@ -97,7 +97,7 @@ export default function AdminDashboard() {
 
   try{
 
-  const res = await axiosInstance.get("/api/admin/places", {
+  const res = await axiosInstance.get("/api/places", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -105,7 +105,8 @@ export default function AdminDashboard() {
    console.log("API RESPONSE:", res.data);
    console.log("FULL RESPONSE:", res);
    console.log("DATA ONLY:", res.data);
-   setPlaces(res.data); 
+  //  setPlaces(res.data.places); 
+   setPlaces(res.data?.places || res.data || []);
 }catch (err) {
     console.log("FETCH ERROR:", err.response?.data || err.message);
   }
@@ -123,7 +124,10 @@ export default function AdminDashboard() {
 
 
   // const activePlaces = places.filter(p => !p.isDeleted);
-  const deletedPlaces = places.filter(p => p.isDeleted);
+  // const deletedPlaces = places.filter(p => p.isDeleted);
+  const deletedPlaces = Array.isArray(places)
+  ? places.filter(p => p.isDeleted)
+  : [];
 
 
   // =======================================================================================
@@ -405,7 +409,8 @@ const removePhoto = async (place) => {
 
 
     <div className="grid grid-cols-4 gap-6">
-        {places.map((place) => (
+        {/* {places?.map((place) => ( */}
+        {Array.isArray(places) && places.map((place) => (
           <div key={place._id} className="border rounded-xl p-4 shadow">
 
       {/* <img
@@ -537,6 +542,6 @@ const removePhoto = async (place) => {
     </div>
   ))}
 </div>
-    // </div>
+     </div>
   );
 }
