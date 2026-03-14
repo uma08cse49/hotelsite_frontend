@@ -22,6 +22,10 @@ import NotFoundPage from './pages/NotFoundPage';
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminLogin from "./pages/AdminLogin";
 import AdminRoute from "./pages/AdminRoute";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import PlacePhotosPage from "./pages/PlacePhotosPage";
+
+const queryClient = new QueryClient();
 
 
 function App() {
@@ -33,7 +37,9 @@ function App() {
   }, []);
 
   return (
+    
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+    <QueryClientProvider client={queryClient}>
       <UserProvider>
         <PlaceProvider>
           <Routes>
@@ -46,6 +52,7 @@ function App() {
               <Route path="/account/places/new" element={<PlacesFormPage />} />
               <Route path="/account/places/:id" element={<PlacesFormPage />} />
               <Route path="/place/:id" element={<PlacePage />} />
+              <Route path="/places/:id/photos" element={<PlacePhotosPage />} />
               <Route path="/account/bookings" element={<BookingsPage />} />
               <Route
                 path="/account/bookings/:id"
@@ -70,6 +77,7 @@ function App() {
           <ToastContainer autoClose={2000} transition={Slide} />
         </PlaceProvider>
       </UserProvider>
+      </QueryClientProvider>
     </GoogleOAuthProvider>
   );
 }
