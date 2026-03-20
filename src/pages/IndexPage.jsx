@@ -307,14 +307,24 @@ import Spinner from "@/components/ui/Spinner";
 import PlaceCard from "@/components/ui/PlaceCard";
 import { useEffect, useState } from "react";
 import axiosInstance from "@/utils/axios";
+import { useRef } from "react";
+
+
 
 
 export default function IndexPage() {
   const { listings = [], loading } = useContext(PlaceContext);
+  // const sortedListings = [...listings].reverse();
+
+  const sortedListings = [...listings].sort(
+  (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+);
 
   if (loading) {
     return <div className="p-10 text-center">Loading...</div>;
   }
+
+  
 
   return (
     
@@ -322,17 +332,22 @@ export default function IndexPage() {
 
       <SectionRow
         title="Available next month in South Goa →"
-        places={listings.slice(0, 5)}
+        places={listings.slice(0, 7)}
       />
 
       <SectionRow
         title="Popular homes in Bengaluru →"
-        places={listings.slice(5, 10)}
+        places={listings.slice(7, 14)}
       />
 
       <SectionRow
         title="Top-rated stays →"
-        places={listings.slice(10, 15)}
+        places={listings.slice(14, 21)}
+      />
+
+      <SectionRow
+        title="Newly Added →"
+        places={listings.slice(21, 28)}
       />
 
     </div>
@@ -341,6 +356,18 @@ export default function IndexPage() {
 
 /* ========================= */
 function SectionRow({ title, places }) {
+
+  const scrollRef = useRef(null);
+
+  const scrollLeft = () => {
+    scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
+  };
+
+  const scrollRight = () => {
+    scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
+  };
+
+
   if (!places || places.length === 0) return null;
 
   return (
@@ -350,13 +377,32 @@ function SectionRow({ title, places }) {
         <h2 className="text-2xl font-semibold">{title}</h2>
 
         <div className="flex gap-2">
+          <button
+            onClick={scrollLeft}
+            className="rounded-full bg-gray-100 p-2"
+          >
+            ◀
+          </button>
+
+          <button
+            onClick={scrollRight}
+            className="rounded-full bg-gray-100 p-2"
+          >
+            ▶
+          </button>
+        </div>
+{/* 
+        <div className="flex gap-2">
           <button className="rounded-full bg-gray-100 p-2">◀</button>
           <button className="rounded-full bg-gray-100 p-2">▶</button>
-        </div>
+        </div> */}
       </div>
 
       {/* ROW */}
-      <div className="flex gap-6 overflow-x-auto scrollbar-hide">
+      <div 
+        ref={scrollRef} 
+        className="flex gap-6 overflow-x-auto scrollbar-hide"
+        >
         {places.map(place => (
           <PlaceCard key={place._id} place={place} />
         ))}

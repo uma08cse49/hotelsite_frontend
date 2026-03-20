@@ -88,8 +88,6 @@ export default function AdminDashboard() {
   const fetchPlaces = async () => {
     console.log("FETCH FUNCTION STARTED");
   const token = localStorage.getItem("adminToken");
-     console.log("FETCH FUNCTION STARTED");
-
    if (!token) {
     console.log("NO TOKEN FOUND");
     return;
