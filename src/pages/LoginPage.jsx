@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { GoogleLogin } from '@react-oauth/google';
+import { useNavigate } from "react-router-dom";
 
 import ProfilePage from './ProfilePage';
 import { useAuth } from '../../hooks';
@@ -10,23 +11,57 @@ const LoginPage = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [redirect, setRedirect] = useState(false);
   const auth = useAuth();
+  const navigate = useNavigate();
 
   const handleFormData = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
+  
 
-    const response = await auth.login(formData);
-    if (response.success) {
-      toast.success(response.message);
-      setRedirect(true);
-    } else {
-      toast.error(response.message);
+  // const handleFormSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   const response = await auth.login(formData);
+  //   if (response.success) {
+  //     toast.success(response.message);
+  //     setRedirect(true);
+  //   } else {
+  //     toast.error(response.message);
+  //   }
+  // };
+
+ const handleFormSubmit = async (e) => {
+  e.preventDefault();
+
+  
+
+  const response = await auth.login(formData);
+
+  console.log("FULL RESPONSE:", response);
+
+  if (response?.success) {
+    const user = response?.user;
+
+    if (!user) {
+      toast.error("User data missing");
+      return;
     }
-  };
+
+    toast.success(response.message);
+
+    if (user.isAdmin) {
+      navigate("/admin/dashboard");
+    } else {
+      navigate("/");
+    }
+
+  } else {
+    toast.error(response?.message || "Login failed");
+  }
+};
+
 
   const handleGoogleLogin = async (credential) => {
     const response = await auth.googleLogin(credential);
@@ -38,13 +73,13 @@ const LoginPage = () => {
     }
   };
 
-  if (redirect) {
-    return <Navigate to={'/'} />;
-  }
+  // if (redirect) {
+  //   return <Navigate to={'/'} />;
+  // }
 
-  if (auth.user) {
-    return <ProfilePage />;
-  }
+  // if (auth.user) {
+  //   return <ProfilePage />;
+  // }
 
   return (
     <div className="mt-4 flex grow items-center justify-around p-4 md:p-0">

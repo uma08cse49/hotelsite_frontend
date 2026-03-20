@@ -28,7 +28,7 @@ export const useProvideAuth = () => {
         const { name, email, password } = formData;
 
         try {
-            const { data } = await axiosInstance.post('user/register', {
+            const { data } = await axiosInstance.post('/api/register', {
                 name,
                 email,
                 password,
@@ -50,7 +50,7 @@ export const useProvideAuth = () => {
         const { email, password } = formData;
 
         try {
-            const { data } = await axiosInstance.post('user/login', {
+            const { data } = await axiosInstance.post('/api/login', {
                 email,
                 password,
             });
@@ -60,7 +60,7 @@ export const useProvideAuth = () => {
                 setItemsInLocalStorage('user', data.user)
                 setItemsInLocalStorage('token', data.token)
             }
-            return { success: true, message: 'Login successfull' }
+            return { success: true, message: 'Login successfull', user:data.user, token: data.token }
         } catch (error) {
             const { message } = error.response.data
             return { success: false, message }
@@ -86,22 +86,40 @@ export const useProvideAuth = () => {
         }
     }
 
-    const logout = async () => {
-        try {
-            const { data } = await axiosInstance.get('/user/logout');
-            if (data.success) {
-                setUser(null);
+    // const logout = async () => {
+    //     try {
+    //         const { data } = await axiosInstance.get('/api/logout');
+    //         if (data.success) {
+    //             setUser(null);
 
-                // Clear user data and token from localStorage when logging out
-                removeItemFromLocalStorage('user');
-                removeItemFromLocalStorage('token');
-            }
-            return { success: true, message: 'Logout successfull' }
+    //             // Clear user data and token from localStorage when logging out
+    //             removeItemFromLocalStorage('user');
+    //             removeItemFromLocalStorage('token');
+    //         }
+    //         return { success: true, message: 'Logout successfull' }
+    //     } catch (error) {
+    //         console.log(error)
+    //         return { success: false, message: 'Something went wrong!' }
+    //     }
+    // }
+
+
+    const logout = () => {
+        try {
+            setUser(null);
+
+            // Clear storage
+            removeItemFromLocalStorage('user');
+            removeItemFromLocalStorage('token');
+            removeItemFromLocalStorage('adminToken');
+
+            return { success: true, message: 'Logout successful' };
+
         } catch (error) {
-            console.log(error)
-            return { success: false, message: 'Something went wrong!' }
+            console.log(error);
+            return { success: false, message: 'Something went wrong!' };
         }
-    }
+    };
 
     const uploadPicture = async (picture) => {
         try {

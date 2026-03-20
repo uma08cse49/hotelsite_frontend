@@ -26,124 +26,209 @@
 // export default PlaceCard;
 
 
-import { Link } from "react-router-dom";
-import { Heart } from "lucide-react";
-import Image from "./Image";
+// import { Link } from "react-router-dom";
+// import { Heart } from "lucide-react";
+// import Image from "./Image";
 
 
-const defaultImage = "https://res.cloudinary.com/drgcw7tzn/image/upload/v1768310364/Airbnb/Places/wbdoog09idhaiynsxccq.jpg";
 
-export default function PlaceCard({ place }) {
-  return (
-    // <Link to={`/place/${place._id}`} className="w-full max-w-[280px]">
-    //   {/* IMAGE */}
-    //   <div className="relative overflow-hidden rounded-2xl">
-    //     <img
-    //       src={place.photos?.[0]}
-    //       alt={place.title}
-    //       className="h-64 w-full object-cover transition-transform duration-300 hover:scale-105"
-    //     />
+// const defaultImage = "https://res.cloudinary.com/drgcw7tzn/image/upload/v1768310364/Airbnb/Places/wbdoog09idhaiynsxccq.jpg";
 
-    //     {/* HEART ICON */}
-    //     <button className="absolute right-3 top-3 rounded-full bg-white/80 p-2">
-    //       <Heart className="h-5 w-5 text-gray-700" />
-    //     </button>
+// export default function PlaceCard({ place }) {
+//   const [liked, setLiked] = useState(false);
 
-    //     {/* IMAGE DOTS */}
-    //     <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1">
-    //       {[1, 2, 3].map((_, i) => (
-    //         <span
-    //           key={i}
-    //           className="h-1.5 w-1.5 rounded-full bg-white opacity-80"
-    //         />
-    //       ))}
-    //     </div>
-    //   </div>
+//   return (
+//     // <Link to={`/place/${place._id}`} className="w-full max-w-[280px]">
+//     //   {/* IMAGE */}
+//     //   <div className="relative overflow-hidden rounded-2xl">
+//     //     <img
+//     //       src={place.photos?.[0]}
+//     //       alt={place.title}
+//     //       className="h-64 w-full object-cover transition-transform duration-300 hover:scale-105"
+//     //     />
 
-    //   {/* TEXT */}
-    //   <div className="mt-3 space-y-1">
-    //     <div className="flex justify-between">
-    //       <h3 className="font-semibold text-sm truncate">
-    //         {place.title}
-    //       </h3>
-    //       <span className="text-sm">⭐ {place.rating || 4.8}</span>
-    //     </div>
+//     //     {/* HEART ICON */}
+//     //     <button className="absolute right-3 top-3 rounded-full bg-white/80 p-2">
+//     //       <Heart className="h-5 w-5 text-gray-700" />
+//     //     </button>
 
-    //     <p className="text-sm text-gray-500 truncate">
-    //       {place.address}
-    //     </p>
+//     //     {/* IMAGE DOTS */}
+//     //     <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1">
+//     //       {[1, 2, 3].map((_, i) => (
+//     //         <span
+//     //           key={i}
+//     //           className="h-1.5 w-1.5 rounded-full bg-white opacity-80"
+//     //         />
+//     //       ))}
+//     //     </div>
+//     //   </div>
 
-    //     <p className="text-sm">
-    //       <span className="font-semibold">₹{place.price}</span> night
-    //     </p>
-    //   </div>
-    // </Link>
+//     //   {/* TEXT */}
+//     //   <div className="mt-3 space-y-1">
+//     //     <div className="flex justify-between">
+//     //       <h3 className="font-semibold text-sm truncate">
+//     //         {place.title}
+//     //       </h3>
+//     //       <span className="text-sm">⭐ {place.rating || 4.8}</span>
+//     //     </div>
 
-//   <Link to={`/place/${place._id}`} className="w-full">
-//     <div className="w-full cursor-pointer">
+//     //     <p className="text-sm text-gray-500 truncate">
+//     //       {place.address}
+//     //     </p>
+
+//     //     <p className="text-sm">
+//     //       <span className="font-semibold">₹{place.price}</span> night
+//     //     </p>
+//     //   </div>
+//     // </Link>
+
+// //   <Link to={`/place/${place._id}`} className="w-full">
+// //     <div className="w-full cursor-pointer">
       
-//       {/* IMAGE FIRST */}
+// //       {/* IMAGE FIRST */}
+// //       <div className="relative aspect-square overflow-hidden rounded-2xl">
+// //         <Image
+// //           src={place.photos?.[0] || defaultImage}
+// //           alt={place.title}
+// //           className="h-full w-full object-cover"
+// //         />
+
+
+// //         {/* Heart icon */}
+// //         <button className="absolute right-3 top-3 rounded-full bg-white p-2 shadow">
+// //           ❤️
+// //         </button>
+// //       </div>
+
+// //  {/* HEART ICON */}
+// //     {/* //     <button className="absolute right-3 top-3 rounded-full bg-white/80 p-2">
+// //     //       <Heart className="h-5 w-5 text-gray-700" />
+// //     //     </button>
+// //      */}
+// //       {/* TEXT BELOW */}
+// //       <div className="mt-2">
+// //         <h3 className="text-sm font-semibold">{place.title}</h3>
+// //         <p className="text-sm text-gray-500">{place.address}</p>
+
+// //         <p className="mt-1 text-sm">
+// //           <span className="font-semibold">₹{place.price}</span> night
+// //         </p>
+// //       </div>
+
+// //     </div>
+// //   </Link>
+
+
+
+//  <Link
+//       to={`/place/${place._id}`}
+//       className="w-[219px] flex-shrink-0 cursor-pointer"
+//     >
+//       {/* IMAGE */}
 //       <div className="relative aspect-square overflow-hidden rounded-2xl">
-//         <Image
+        
+//         {/* Guest favourite badge */}
+//         <div className="absolute left-3 top-3 z-10 rounded-full bg-white px-3 py-1 text-xs font-medium shadow">
+//           Guest favourite
+//         </div>
+
+//         {/* <Image
 //           src={place.photos?.[0] || defaultImage}
 //           alt={place.title}
 //           className="h-full w-full object-cover"
-//         />
+//         /> */}
+       
+//        {/* <Image
+//           src={
+//             place.photos?.length > 0
+//               ? place.photos[0].url
+//               : defaultImage
+//           }
+//           alt={place.title}
+//           className="h-full w-full object-cover"
+//         /> */}
 
+//         <Image
+//           src={
+//             typeof place.photos?.[0] === "string"
+//               ? place.photos[0]
+//               : place.photos?.[0]?.url || defaultImage
+//           }
+//           alt={place.title}
+//           className="h-full w-full object-cover"
+//         />
+        
 
 //         {/* Heart icon */}
-//         <button className="absolute right-3 top-3 rounded-full bg-white p-2 shadow">
+//         <button className="absolute right-3 top-3 z-10 rounded-full bg-white p-2 shadow">
 //           ❤️
 //         </button>
 //       </div>
 
-//  {/* HEART ICON */}
-//     {/* //     <button className="absolute right-3 top-3 rounded-full bg-white/80 p-2">
-//     //       <Heart className="h-5 w-5 text-gray-700" />
-//     //     </button>
-//      */}
-//       {/* TEXT BELOW */}
-//       <div className="mt-2">
-//         <h3 className="text-sm font-semibold">{place.title}</h3>
-//         <p className="text-sm text-gray-500">{place.address}</p>
+//       {/* TEXT */}
+//       <div className="mt-2 space-y-0.5">
+//       {/* <div className="mt-[-2.5rem] space-y-0.5"> */}
+//       {/* <div className="mt-2 leading-tight"> */}
+//         <h3 className="text-sm font-semibold leading-tight truncate">
+//           {place.title}
+//         </h3>
 
-//         <p className="mt-1 text-sm">
+//         <p className="text-sm text-gray-500 leading-tight truncate">
+//           {place.address}
+//         </p>
+
+//         <p className="text-sm">
 //           <span className="font-semibold">₹{place.price}</span> night
 //         </p>
 //       </div>
+//     </Link>
 
-//     </div>
-//   </Link>
+//   );
+// }
 
 
+// =================================================================================================
 
- <Link
+import { Link,useNavigate} from "react-router-dom";
+import { Heart } from "lucide-react";
+import { useState,useContext } from "react"; // ✅ MISSING IMPORT
+import { UserContext } from "../../providers/UserProvider";
+import Image from "./Image";
+
+const defaultImage =
+  "https://res.cloudinary.com/drgcw7tzn/image/upload/v1768310364/Airbnb/Places/wbdoog09idhaiynsxccq.jpg";
+
+export default function PlaceCard({ place }) {
+  const [liked, setLiked] = useState(false);
+  const { user } = useContext(UserContext); // get logged user
+  const navigate = useNavigate();
+
+  const toggleLike = (e) => {
+    e.preventDefault(); // ✅ prevents Link navigation
+    e.stopPropagation(); // ✅ stops parent click
+
+     // 🔐 If user not logged in → go to login page
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+
+    setLiked(!liked);
+  };
+
+  return (
+    <Link
       to={`/place/${place._id}`}
       className="w-[219px] flex-shrink-0 cursor-pointer"
     >
       {/* IMAGE */}
       <div className="relative aspect-square overflow-hidden rounded-2xl">
-        
+
         {/* Guest favourite badge */}
         <div className="absolute left-3 top-3 z-10 rounded-full bg-white px-3 py-1 text-xs font-medium shadow">
           Guest favourite
         </div>
-
-        {/* <Image
-          src={place.photos?.[0] || defaultImage}
-          alt={place.title}
-          className="h-full w-full object-cover"
-        /> */}
-       
-       {/* <Image
-          src={
-            place.photos?.length > 0
-              ? place.photos[0].url
-              : defaultImage
-          }
-          alt={place.title}
-          className="h-full w-full object-cover"
-        /> */}
 
         <Image
           src={
@@ -154,18 +239,21 @@ export default function PlaceCard({ place }) {
           alt={place.title}
           className="h-full w-full object-cover"
         />
-        
 
-        {/* Heart icon */}
-        <button className="absolute right-3 top-3 z-10 rounded-full bg-white p-2 shadow">
-          ❤️
+        {/* ❤️ HEART BUTTON */}
+        <button
+          onClick={toggleLike}
+          className="absolute right-3 top-3 z-10 rounded-full bg-white p-2 shadow"
+        >
+          <Heart
+            size={18}
+            className={liked ? "fill-red-500 text-red-500" : "text-gray-600"}
+          />
         </button>
       </div>
 
       {/* TEXT */}
       <div className="mt-2 space-y-0.5">
-      {/* <div className="mt-[-2.5rem] space-y-0.5"> */}
-      {/* <div className="mt-2 leading-tight"> */}
         <h3 className="text-sm font-semibold leading-tight truncate">
           {place.title}
         </h3>
@@ -179,6 +267,5 @@ export default function PlaceCard({ place }) {
         </p>
       </div>
     </Link>
-
   );
 }

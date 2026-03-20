@@ -72,6 +72,17 @@ function App() {
                 }
               />
 
+              {/* <Route
+                path="/admin/dashboard"
+                element={
+                  <ProtectedRoute adminOnly={true}>
+                    <AdminLayout>
+                      <AdminDashboard />
+                    </AdminLayout>
+                  </ProtectedRoute>
+                }
+              /> */}
+
             </Route>
           </Routes>
           <ToastContainer autoClose={2000} transition={Slide} />
