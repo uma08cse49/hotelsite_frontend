@@ -62,15 +62,29 @@ const BookingWidget = ({ place }) => {
     }
 
     try {
-      const response = await axiosInstance.post('/bookings', {
-        checkIn: dateRange.from,
-        checkOut: dateRange.to,
-        noOfGuests,
-        name,
-        phone,
-        place: id,
-        price: numberOfNights * price,
-      });
+      // const response = await axiosInstance.post('/bookings', {
+      //   checkIn: dateRange.from,
+      //   checkOut: dateRange.to,
+      //   noOfGuests,
+      //   name,
+      //   phone,
+      //   place: id,
+      //   price: numberOfNights * price,
+      // });
+
+      const payload = {
+          checkIn: new Date(dateRange.from).toISOString(),
+          checkOut: new Date(dateRange.to).toISOString(),
+          noOfGuests, // ✅ important: matches backend
+          name,
+          phone,
+          place: id,
+          price: numberOfNights * price,
+        };
+
+        console.log("BOOKING PAYLOAD:", payload); // ✅ debug
+
+        const response = await axiosInstance.post('/api/bookings', payload);
 
       const bookingId = response.data.booking._id;
 
