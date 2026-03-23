@@ -24,6 +24,8 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminRoute from "./pages/AdminRoute";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import PlacePhotosPage from "./pages/PlacePhotosPage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import AdminLayout from "./layouts/AdminLayout";
 
 const queryClient = new QueryClient();
 
@@ -47,7 +49,15 @@ function App() {
               <Route index element={<IndexPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
-              <Route path="/account" element={<ProfilePage />} />
+              {/* <Route path="/account" element={<ProfilePage />} /> */}
+              <Route
+              path="/account"
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
               <Route path="/account/places" element={<PlacesPage />} />
               <Route path="/account/places/new" element={<PlacesFormPage />} />
               <Route path="/account/places/:id" element={<PlacesFormPage />} />
@@ -63,16 +73,16 @@ function App() {
 
               <Route path="/admin/login" element={<AdminDashboard />} />
 
-              <Route
+              {/* <Route
                 path="/admin/dashboard"
                 element={
                   <AdminRoute>
                     <AdminDashboard />
                   </AdminRoute>
                 }
-              />
+              /> */}
 
-              {/* <Route
+              <Route
                 path="/admin/dashboard"
                 element={
                   <ProtectedRoute adminOnly={true}>
@@ -81,7 +91,7 @@ function App() {
                     </AdminLayout>
                   </ProtectedRoute>
                 }
-              /> */}
+              />
 
             </Route>
           </Routes>
