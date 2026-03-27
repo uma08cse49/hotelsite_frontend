@@ -69,10 +69,16 @@ import { uploadPlacePhotos } from "../services/placeService";
 import { FaTrash } from "react-icons/fa";
 import imageCompression from "browser-image-compression";
 
+import { useQueryClient } from "@tanstack/react-query";
+
+
+
+
 export default function AdminDashboard() {
   const [places, setPlaces] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState({});
   const navigate = useNavigate();
+  const [addedPhotos, setAddedPhotos] = useState([]);
 
   // Fetch all places
   useEffect(() => {
@@ -85,6 +91,8 @@ export default function AdminDashboard() {
   //   console.log("API RESPONSE:", res.data);
   //   setPlaces(res.data);
   // };
+  const queryClient = useQueryClient();
+
   const fetchPlaces = async () => {
     console.log("FETCH FUNCTION STARTED");
   const token = localStorage.getItem("adminToken");
@@ -229,7 +237,29 @@ const handleUpload = async (placeId) => {
       compressedFiles.push(compressed);
     }
 
-    await uploadPlacePhotos(placeId, compressedFiles, token);
+    // await uploadPlacePhotos(placeId, compressedFiles, token);
+
+    const response = await uploadPlacePhotos(placeId, compressedFiles, token);
+
+    const newPhotos = response?.data || [];
+
+    console.log("NEW PHOTOS:", response);
+
+    // ✅ UPDATE UI INSTANTLY (NO NEED TO WAIT FOR FETCH)
+    setPlaces((prev) =>
+        prev.map((p) => {
+          if (p._id === placeId) {
+            return {
+              ...p,
+              photos: [...newPhotos, ...(p.photos || [])], // latest first
+            };
+          }
+          return p;
+        })
+      );
+
+      // 🔥 force re-render
+      setPlaces((prev) => [...prev]);
 
     await fetchPlaces();
 
@@ -256,7 +286,11 @@ const handleUpload = async (placeId) => {
       },
     })
 
-    fetchPlaces(); // re-fetch updated list
+      // 🔥 THIS IS THE FIX
+    queryClient.invalidateQueries(["places"]);
+
+    // fetchPlaces(); // re-fetch updated list
+
   } catch (err) {
     console.error(err);
   }
@@ -276,7 +310,11 @@ const handleRestore = async (id) => {
       },
     }
     );
-    fetchPlaces(); // refresh list
+
+      // 🔥 THIS IS THE FIX
+    queryClient.invalidateQueries(["places"]);
+
+    // fetchPlaces(); // refresh list
   } catch (err) {
     console.log("Restore error:", err);
   }
@@ -286,7 +324,7 @@ const getThumbnail = (photo) => {
   const url =
     typeof photo === "string"
       ? photo
-      : photo?.url;
+      : photo?.url || photo?.secure_url;
 
   if (!url) return noImage;
 
@@ -321,7 +359,7 @@ const getThumbnail = (photo) => {
 
 
 
-const removePhoto = async (place) => {
+const removePhoto = async (place,photo) => {
   try {
 
     if (!window.confirm("Delete this photo?")) return;
@@ -336,12 +374,27 @@ const removePhoto = async (place) => {
       }),
     });
 
+    const data = await res.json();
+
+
     if (res.ok) {
       setPlaces((prev) =>
         prev.map((p) =>
           p._id === place._id ? { ...p, photos: [] } : p
         )
       );
+      // setPlaces((prev) =>
+      //   prev.map((p) =>
+      //     p._id === place._id
+      //       ? {
+      //           ...p,
+      //           photos: p.photos.filter(
+      //             (ph) => ph.public_id !== place.photos[0].public_id
+      //           ),
+      //         }
+      //       : p
+      //   )
+      // );
     }
 
   } catch (err) {
@@ -425,17 +478,41 @@ const removePhoto = async (place) => {
       /> */}
       <div className="relative group h-40">
       <img
-        src={getThumbnail(place.photos?.[0]) || null}
+        // src={getThumbnail(place.photos?.[0]) || null}
+        // key={place?.photos?.[0]?.url} // 🔥 FORCE IMAGE REFRESH
+        // src={getThumbnail(addedPhotos?.[0] || place.photos?.[0]) || null}
+
+        src={place.photos?.[0]?.url || "https://placehold.co/400x300"}
+        // src={place.coverPhoto || "https://placehold.co/400x300?text=No+Thumbnail"}
+
+        key={ addedPhotos?.[0]?.url || place?.photos?.[0]?.url} // 🔥 force re-render
         alt={place.title}
         // onError={(e) => (e.target.src = noImage)}
         className="h-40 w-full object-cover rounded-lg mb-3"
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = "https://placehold.co/400x300";
+        }}
       />
 
 
       {/* HOVER DELETE BUTTON */}
   {place.photos?.length > 0 && (
-    <button
-      onClick={() => removePhoto(place)}
+    // <button
+    //   onClick={() => removePhoto(place,photo)}
+    //   className="
+    //     absolute top-2 right-2
+    //     bg-red-500 text-white
+    //     p-2 rounded-full
+    //     opacity-0 group-hover:opacity-100
+    //     transition-all duration-300
+    //     hover:bg-red-600
+    //   "
+    // >
+
+      <button
+      type="button"
+      onClick={() => removePhoto(place, place.photos[0])} // ✅ FIXED
       className="
         absolute top-2 right-2
         bg-red-500 text-white
@@ -506,7 +583,7 @@ const removePhoto = async (place) => {
           </button>
         )} */}
 
-      <div className="flex gap-3 mt-3">
+      {/* <div className="flex gap-3 mt-3">
 
         {!place.isDeleted ? (
           <>
@@ -533,7 +610,36 @@ const removePhoto = async (place) => {
           </button>
         )}
 
-      </div>
+      </div> */}
+
+      <div className="flex gap-3 mt-3">
+
+  {place.isDeleted === true ? (
+    <button
+      onClick={() => handleRestore(place._id)}
+      className="bg-green-500 text-white px-4 py-2 rounded-lg w-full"
+    >
+      Restore
+    </button>
+  ) : (
+    <>
+      <button
+        onClick={() => navigate(`/account/places/${place._id}`)}
+        className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+      >
+        Edit
+      </button>
+
+      <button
+        onClick={() => handleDelete(place._id)}
+        className="bg-red-500 text-white px-4 py-2 rounded-lg"
+      >
+        Delete
+      </button>
+    </>
+  )}
+
+</div>
 
       
 

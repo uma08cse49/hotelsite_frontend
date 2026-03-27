@@ -118,18 +118,31 @@ import AccountNav from '@/components/ui/AccountNav';
 import InfoCard from '@/components/ui/InfoCard';
 import Spinner from '@/components/ui/Spinner';
 import { useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+
+
+
 
 const fetchPlaces = async () => {
-  const { data } = await axiosInstance.get("/api/places/user-places");
+  const { data } = await axiosInstance.get("api/places/user-places");
   return data.places || [];
 };
 
 const PlacesPage = () => {
 
+  const queryClient = useQueryClient();
+
   const { data: places = [], isLoading } = useQuery({
     queryKey: ["places"],
     queryFn: fetchPlaces
   });
+
+  console.log(
+  places.map(p => ({
+    id: p._id,
+    isDeleted: p.isDeleted
+  }))
+);
 
   if (isLoading) {
     return <Spinner />;

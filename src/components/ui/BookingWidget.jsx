@@ -84,6 +84,8 @@ const BookingWidget = ({ place }) => {
 
         console.log("BOOKING PAYLOAD:", payload); // ✅ debug
 
+        const token = localStorage.getItem("token");
+
         const response = await axiosInstance.post('/api/bookings', payload);
 
       const bookingId = response.data.booking._id;

@@ -354,6 +354,8 @@ useEffect(() => {
           placeholder="title, for example: My lovely apt"
         />
 
+        
+
         {preInput('Address', 'address to this place')}
         {/* <input
           type="text"

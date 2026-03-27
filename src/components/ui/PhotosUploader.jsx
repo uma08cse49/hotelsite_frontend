@@ -381,152 +381,353 @@
 
 // ===============================================================================================================
 
-import React, { useState ,useEffect } from 'react';
-import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
-import Image from './Image';
-import axiosInstance from '../../utils/axios';
-import { useParams } from "react-router-dom";
-import imageCompression from "browser-image-compression";
+// import React, { useState ,useEffect } from 'react';
+// import { toast } from "react-toastify";
+// import { Link } from "react-router-dom";
+// import Image from './Image';
+// import axiosInstance from '../../utils/axios';
+// import { useParams } from "react-router-dom";
+// import imageCompression from "browser-image-compression";
 
 
-const PhotosUploader = ({ id, addedPhotos, setAddedPhotos }) => {
-  const [photoLink, setphotoLink] = useState("");
+// const PhotosUploader = ({ id, addedPhotos, setAddedPhotos }) => {
+//   const [photoLink, setphotoLink] = useState("");
 
-  const addPhotoByLink = async (e) => {
-    e.preventDefault();
+//   const addPhotoByLink = async (e) => {
+//     e.preventDefault();
 
-    const { data: filename } = await axiosInstance.post("/upload-by-link", {
-      link: photoLink,
-    });
+//     const { data: filename } = await axiosInstance.post("/upload-by-link", {
+//       link: photoLink,
+//     });
 
-    setAddedPhotos((prev) => [
-      ...prev,
-      { url: filename, category: "" }
-    ]);
+//     setAddedPhotos((prev) => [
+//       ...prev,
+//       { url: filename, category: "" }
+//     ]);
 
-    setphotoLink("");
-  };
+//     setphotoLink("");
+//   };
 
-  // const uploadPhoto = async (e) => {
-  //   const files = e.target.files;
+//   // const uploadPhoto = async (e) => {
+//   //   const files = e.target.files;
 
-  //   const data = new FormData();
+//   //   const data = new FormData();
 
-  //   for (let i = 0; i < files.length; i++) {
-  //     const file = files[i];
+//   //   for (let i = 0; i < files.length; i++) {
+//   //     const file = files[i];
 
-  //     const options = {
-  //       maxSizeMB: 1,
-  //       maxWidthOrHeight: 1920,
-  //       useWebWorker: true,
-  //     };
+//   //     const options = {
+//   //       maxSizeMB: 1,
+//   //       maxWidthOrHeight: 1920,
+//   //       useWebWorker: true,
+//   //     };
 
-  //     try {
-  //       const compressedFile = await imageCompression(file, options);
-  //       data.append("photos", compressedFile);
-  //     } catch (error) {
-  //       console.log("Compression error:", error);
-  //     }
-  //   }
+//   //     try {
+//   //       const compressedFile = await imageCompression(file, options);
+//   //       data.append("photos", compressedFile);
+//   //     } catch (error) {
+//   //       console.log("Compression error:", error);
+//   //     }
+//   //   }
 
-  //   const token = localStorage.getItem("adminToken");
+//   //   const token = localStorage.getItem("adminToken");
 
-  //   const uploadUrl = id ? `/api/admin/upload/${id}` : `/api/admin/upload`;
+//   //   const uploadUrl = id ? `/api/admin/upload/${id}` : `/api/admin/upload`;
 
-  //   // const uploadUrl = id ? `/api/places/upload/${id}` : `/api/places/upload`;
+//   //   // const uploadUrl = id ? `/api/places/upload/${id}` : `/api/places/upload`;
 
-  // //   const response = await axiosInstance.post(uploadUrl, data, {
-  // //     headers: {
-  // //       Authorization: `Bearer ${token}`,
-  // //       // "Content-Type": "multipart/form-data",
-  // //     },
-  // //   });
+//   // //   const response = await axiosInstance.post(uploadUrl, data, {
+//   // //     headers: {
+//   // //       Authorization: `Bearer ${token}`,
+//   // //       // "Content-Type": "multipart/form-data",
+//   // //     },
+//   // //   });
 
-  // //   console.log("Upload response:", response.data);
-  // //   const newPhotos = response.data.map((file) => ({
-  // //     url: file,
-  // //     category: "",
-  // //   }));
+//   // //   console.log("Upload response:", response.data);
+//   // //   const newPhotos = response.data.map((file) => ({
+//   // //     url: file,
+//   // //     category: "",
+//   // //   }));
 
-  // //   setAddedPhotos((prev) => [...prev, ...newPhotos]);
+//   // //   setAddedPhotos((prev) => [...prev, ...newPhotos]);
 
-  //     const response = await axiosInstance.post(
-  //       "/api/admin/upload",
-  //       formData,
-  //       { headers: { "Content-Type": "multipart/form-data" } }
-  //     );
+//   //     const response = await axiosInstance.post(
+//   //       "/api/admin/upload",
+//   //       formData,
+//   //       { headers: { "Content-Type": "multipart/form-data" } }
+//   //     );
 
-  //     console.log("Upload response:", response.data);
+//   //     console.log("Upload response:", response.data);
 
-  //     const newPhotos = response.data.photos.map((photo) => ({
-  //       url: photo.url,
-  //       public_id: photo.public_id,
-  //       category: photo.category || "Other",
-  //     }));
+//   //     const newPhotos = response.data.photos.map((photo) => ({
+//   //       url: photo.url,
+//   //       public_id: photo.public_id,
+//   //       category: photo.category || "Other",
+//   //     }));
 
-  //     setAddedPhotos((prev) => [...prev, ...newPhotos]);
-  // };
+//   //     setAddedPhotos((prev) => [...prev, ...newPhotos]);
+//   // };
+
+
+// //   const uploadPhoto = async (e) => {
+// //   const files = e.target.files;
+
+// //   const formData = new FormData();
+
+// //   for (let i = 0; i < files.length; i++) {
+// //     const file = files[i];
+
+// //     const options = {
+// //       maxSizeMB: 1,
+// //       maxWidthOrHeight: 1920,
+// //       useWebWorker: true,
+// //     };
+
+// //     try {
+// //       const compressedFile = await imageCompression(file, options);
+
+// //       formData.append("photos", compressedFile);
+
+// //     } catch (error) {
+// //       console.log("Compression error:", error);
+// //     }
+// //   }
+
+// //   const token = localStorage.getItem("adminToken");
+
+// //   console.log("Uploading for place id:", id);
+
+// //   const uploadUrl = id ? `/api/admin/upload/${id}` : `/api/admin/upload`;
+
+// //    const response = axiosInstance.post(uploadUrl , 
+// //     formData,
+// //     {
+// //       headers: {
+// //         Authorization: `Bearer ${token}`,
+// //         "Content-Type": "multipart/form-data",  
+// //       },
+// //     }
+// //   );
+
+// //   console.log("Upload response:", response.data);
+
+// //   const photos = response.data?.photos || [];
+
+// //   const newPhotos = photos.map((photo) => ({
+// //     url: photo.url,
+// //     public_id: photo.public_id,
+// //     category: photo.category || "Other",
+// //   }));
+
+// //   setAddedPhotos((prev) => [...prev, ...newPhotos]);
+// // };
+
+// //   const removePhoto = (index) => {
+// //     const updated = [...addedPhotos];
+// //     updated.splice(index, 1);
+// //     setAddedPhotos(updated);
+// //   };
+
+// //   const selectAsMainPhoto = (e, photo) => {
+// //     e.preventDefault();
+
+// //     const photoUrl = typeof photo === "string" ? photo : photo.url;
+
+// //     const updatedPhotos = [
+// //       addedPhotos.find(
+// //         (p) => (typeof p === "string" ? p : p.url) === photoUrl
+// //       ),
+// //       ...addedPhotos.filter(
+// //         (p) => (typeof p === "string" ? p : p.url) !== photoUrl
+// //       ),
+// //     ];
+
+// //     setAddedPhotos(updatedPhotos);
+// //   };
+
+// //   return (
+// //     <>
+// //       {/* LINK UPLOAD */}
+// //       <div className="flex gap-2">
+// //         <input
+// //           value={photoLink}
+// //           onChange={(e) => setphotoLink(e.target.value)}
+// //           type="text"
+// //           placeholder="Add using a link ...jpg"
+// //         />
+// //         <button
+// //           className="rounded-2xl bg-gray-200 px-4"
+// //           onClick={addPhotoByLink}
+// //         >
+// //           Add photo
+// //         </button>
+// //       </div>
+
+// //       {/* PHOTO GRID */}
+// //       <div className="mt-4 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+// //         {addedPhotos?.length > 0 &&
+// //           addedPhotos.map((photo, index) => {
+// //             const photoUrl = typeof photo === "string" ? photo : photo.url;
+
+// //             return (
+// //               <div key={index} className="bg-white border rounded-xl p-2 shadow-sm">
+
+// //                 {/* IMAGE */}
+// //                 <div className="relative">
+// //                   <Image
+// //                     src={photoUrl}
+// //                     alt=""
+// //                     className="w-full h-32 object-cover rounded-lg"
+// //                   />
+
+// //                   {/* REMOVE BUTTON */}
+// //                   <button
+// //                     onClick={() => removePhoto(index)}
+// //                     className="absolute top-2 right-2 bg-black/60 text-white rounded-full px-2 py-1 text-xs"
+// //                   >
+// //                     ✕
+// //                   </button>
+
+// //                   {/* MAIN PHOTO STAR */}
+// //                   <button
+// //                     onClick={(e) => selectAsMainPhoto(e, photo)}
+// //                     className="absolute bottom-2 left-2 bg-black/60 text-white rounded-full p-1"
+// //                   >
+// //                     {photoUrl ===
+// //                     (typeof addedPhotos[0] === "string"
+// //                       ? addedPhotos[0]
+// //                       : addedPhotos[0]?.url) ? (
+// //                       <svg
+// //                         xmlns="http://www.w3.org/2000/svg"
+// //                         viewBox="0 0 24 24"
+// //                         fill="currentColor"
+// //                         className="h-5 w-5"
+// //                       >
+// //                         <path d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" />
+// //                       </svg>
+// //                     ) : (
+// //                       <svg
+// //                         xmlns="http://www.w3.org/2000/svg"
+// //                         fill="none"
+// //                         stroke="currentColor"
+// //                         viewBox="0 0 24 24"
+// //                         className="h-5 w-5"
+// //                       >
+// //                         <path
+// //                           strokeLinecap="round"
+// //                           strokeLinejoin="round"
+// //                           strokeWidth="1.5"
+// //                           d="M11.48 3.5l2.125 5.111 5.518.442-4.204 3.602 1.285 5.385L12 15.5l-4.204 2.54 1.285-5.385L4.877 9.053l5.518-.442L11.48 3.5z"
+// //                         />
+// //                       </svg>
+// //                     )}
+// //                   </button>
+// //                 </div>
+
+// //                 {/* CATEGORY DROPDOWN */}
+// //                 <select
+// //                   value={photo.category || ""}
+// //                   onChange={(e) => {
+// //                     const updated = [...addedPhotos];
+// //                     updated[index].category = e.target.value;
+// //                     setAddedPhotos(updated);
+// //                   }}
+// //                   className="border rounded-md w-full mt-2 p-1 text-sm"
+// //                 >
+// //                   <option value="">Select category</option>
+// //                   <option value="Living room">Living room</option>
+// //                   <option value="Bedroom">Bedroom</option>
+// //                   <option value="Kitchen">Kitchen</option>
+// //                   <option value="Bathroom">Bathroom</option>
+// //                 </select>
+// //               </div>
+// //             );
+// //           })}
+
+// //         {/* UPLOAD BUTTON */}
+// //         <label className="flex h-32 cursor-pointer items-center justify-center gap-1 rounded-2xl border text-2xl text-gray-600">
+// //           <input type="file" multiple className="hidden" onChange={uploadPhoto} />
+// //           Upload
+// //         </label>
+// //       </div>
+// //     </>
+// //   );
+// // };
 
 
 //   const uploadPhoto = async (e) => {
-//   const files = e.target.files;
+//     const files = e.target.files;
 
-//   const formData = new FormData();
+//     const data = new FormData();
 
-//   for (let i = 0; i < files.length; i++) {
-//     const file = files[i];
+//     for (let i = 0; i < files.length; i++) {
+//       const file = files[i];
 
-//     const options = {
-//       maxSizeMB: 1,
-//       maxWidthOrHeight: 1920,
-//       useWebWorker: true,
-//     };
+//       const options = {
+//         maxSizeMB: 1,
+//         maxWidthOrHeight: 1920,
+//         useWebWorker: true,
+//       };
 
-//     try {
-//       const compressedFile = await imageCompression(file, options);
-
-//       formData.append("photos", compressedFile);
-
-//     } catch (error) {
-//       console.log("Compression error:", error);
+//       try {
+//         const compressedFile = await imageCompression(file, options);
+//         data.append("photos", compressedFile);
+//       } catch (error) {
+//         console.log("Compression error:", error);
+//       }
 //     }
-//   }
 
-//   const token = localStorage.getItem("adminToken");
+//     const token = localStorage.getItem("adminToken");
 
-//   console.log("Uploading for place id:", id);
+//     const uploadUrl = id ? `/api/admin/upload/${id}` : `/api/admin/upload`;
 
-//   const uploadUrl = id ? `/api/admin/upload/${id}` : `/api/admin/upload`;
 
-//    const response = axiosInstance.post(uploadUrl , 
-//     formData,
-//     {
+//     // const uploadUrl = `/api/admin/upload/${id}` ;
+
+//     const response = await axiosInstance.post(uploadUrl, data, {
 //       headers: {
 //         Authorization: `Bearer ${token}`,
-//         "Content-Type": "multipart/form-data",  
+//         "Content-Type": "multipart/form-data",
 //       },
-//     }
-//   );
+//     });
 
-//   console.log("Upload response:", response.data);
+//     console.log("Upload response:", response.data);
 
-//   const photos = response.data?.photos || [];
+//     // const photos = response.data?.photos || [];
 
-//   const newPhotos = photos.map((photo) => ({
-//     url: photo.url,
-//     public_id: photo.public_id,
-//     category: photo.category || "Other",
-//   }));
+//     const photos = Array.isArray(response.data)
+//     ? response.data
+//     : response.data?.photos || [];
 
-//   setAddedPhotos((prev) => [...prev, ...newPhotos]);
-// };
+//     const newPhotos = photos.map((photo) => ({
+//       url: photo.secure_url || photo.url,
+//       public_id: photo.public_id,
+//       category: photo.category || "Other",
+//     }));
 
-//   const removePhoto = (index) => {
-//     const updated = [...addedPhotos];
-//     updated.splice(index, 1);
-//     setAddedPhotos(updated);
+//     setAddedPhotos((prev) => [...prev, ...newPhotos]);
 //   };
+
+//   // const removePhoto = (index) => {
+//   //   const updated = [...addedPhotos];
+//   //   updated.splice(index, 1);
+//   //   setAddedPhotos(updated);
+//   // };
+
+
+//   const removePhoto = (photoToRemove) => {
+//   setAddedPhotos((prev) =>
+//     prev.filter((photo) => {
+//       const url = typeof photo === "string" ? photo : photo.url;
+//       const removeUrl =
+//         typeof photoToRemove === "string"
+//           ? photoToRemove
+//           : photoToRemove.url;
+
+//       return url !== removeUrl;
+//     })
+//   );
+// };
 
 //   const selectAsMainPhoto = (e, photo) => {
 //     e.preventDefault();
@@ -570,7 +771,8 @@ const PhotosUploader = ({ id, addedPhotos, setAddedPhotos }) => {
 //             const photoUrl = typeof photo === "string" ? photo : photo.url;
 
 //             return (
-//               <div key={index} className="bg-white border rounded-xl p-2 shadow-sm">
+//               // <div key={index} className="bg-white border rounded-xl p-2 shadow-sm">
+//               <div key={photo.public_id || photoUrl} className="bg-white border rounded-xl p-2 shadow-sm">
 
 //                 {/* IMAGE */}
 //                 <div className="relative">
@@ -582,7 +784,8 @@ const PhotosUploader = ({ id, addedPhotos, setAddedPhotos }) => {
 
 //                   {/* REMOVE BUTTON */}
 //                   <button
-//                     onClick={() => removePhoto(index)}
+//                     // onClick={() => removePhoto(index)}
+//                     onClick={() => removePhoto(photo)}
 //                     className="absolute top-2 right-2 bg-black/60 text-white rounded-full px-2 py-1 text-xs"
 //                   >
 //                     ✕
@@ -629,9 +832,10 @@ const PhotosUploader = ({ id, addedPhotos, setAddedPhotos }) => {
 //                   value={photo.category || ""}
 //                   onChange={(e) => {
 //                     const updated = [...addedPhotos];
-//                     updated[index].category = e.target.value;
+//                     updated[index].category = e.target.value;              
 //                     setAddedPhotos(updated);
-//                   }}
+//                   }
+//                 }
 //                   className="border rounded-md w-full mt-2 p-1 text-sm"
 //                 >
 //                   <option value="">Select category</option>
@@ -654,10 +858,57 @@ const PhotosUploader = ({ id, addedPhotos, setAddedPhotos }) => {
 //   );
 // };
 
+// export default PhotosUploader;
 
+
+
+// ============================================================================================
+import React, { useState } from 'react';
+import { toast } from "react-toastify";
+import Image from './Image';
+import axiosInstance from '../../utils/axios';
+import imageCompression from "browser-image-compression";
+import { useEffect} from "react";
+
+const PhotosUploader = ({ id, addedPhotos, setAddedPhotos }) => {
+  const [photoLink, setphotoLink] = useState("");
+
+  const [coverPhoto, setCoverPhoto] = useState("");
+  // const [addedPhotos, setAddedPhotos] = useState([]);
+
+
+  // ✅ ADD HERE (inside component, outside functions)
+  useEffect(() => {
+    console.log("ADDED PHOTOS UPDATED:", addedPhotos);
+  }, [addedPhotos]);
+
+  // =========================
+  // ADD PHOTO BY LINK
+  // =========================
+  const addPhotoByLink = async (e) => {
+    e.preventDefault();
+
+    try {
+      const { data: filename } = await axiosInstance.post("/upload-by-link", {
+        link: photoLink,
+      });
+
+      setAddedPhotos((prev) => [
+        ...prev,
+        { url: filename, category: "" }
+      ]);
+
+      setphotoLink("");
+    } catch (err) {
+      toast.error("Failed to add photo");
+    }
+  };
+
+  // =========================
+  // UPLOAD PHOTO
+  // =========================
   const uploadPhoto = async (e) => {
     const files = e.target.files;
-
     const data = new FormData();
 
     for (let i = 0; i < files.length; i++) {
@@ -677,58 +928,110 @@ const PhotosUploader = ({ id, addedPhotos, setAddedPhotos }) => {
       }
     }
 
-    const token = localStorage.getItem("adminToken");
+    try {
+      const token = localStorage.getItem("adminToken");
+      const uploadUrl = id ? `/api/admin/upload/${id}` : `/api/admin/upload`;
 
-    const uploadUrl = id ? `/api/admin/upload/${id}` : `/api/admin/upload`;
+      const response = await axiosInstance.post(uploadUrl, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // "Content-Type": "multipart/form-data",
+        },
+      });
 
+      console.log("Upload response:", response.data);
 
-    // const uploadUrl = `/api/admin/upload/${id}` ;
+      const photos = Array.isArray(response.data)
+        ? response.data
+        : response.data?.photos || [];
 
-    const response = await axiosInstance.post(uploadUrl, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    });
+      const newPhotos = photos.map((photo) => ({
+        url: photo.secure_url || photo.url,
+        public_id: photo.public_id,
+        category: photo.category || "Other",
+      }));
+      console.log("ID:", id);
+      console.log("ADDED PHOTOS:", newPhotos);
 
-    console.log("Upload response:", response.data);
+// if(id){
+//       setPlaces((prev) =>
+//         prev.map((p) =>
+//           p._id === id
+//             ? {
+//                 ...p,
+//                 photos: [
+//                   ...(p.photos || []),
+//                   ...newPhotos
+//                 ]
+//               }
+//             : p
+//         )
+//       );
+//     }
 
-    // const photos = response.data?.photos || [];
+      
+      setAddedPhotos((prev) => [...prev, ...newPhotos]);
+     
+      toast.success("Photos uploaded successfully");
+      
 
-    const photos = Array.isArray(response.data)
-    ? response.data
-    : response.data?.photos || [];
-
-    const newPhotos = photos.map((photo) => ({
-      url: photo.secure_url || photo.url,
-      public_id: photo.public_id,
-      category: photo.category || "Other",
-    }));
-
-    setAddedPhotos((prev) => [...prev, ...newPhotos]);
+    } catch (err) {
+      console.error("UPLOAD ERROR FULL:", err);
+      toast.error("Upload failed");
+    }
   };
 
-  const removePhoto = (index) => {
-    const updated = [...addedPhotos];
-    updated.splice(index, 1);
-    setAddedPhotos(updated);
+  // =========================
+  // REMOVE PHOTO ✅ FIXED
+  // =========================
+  const removePhoto = (photoToRemove) => {
+    setAddedPhotos((prev) =>
+      prev.filter(
+        (p) =>
+          (p.public_id || p.url) !==
+          (photoToRemove.public_id || photoToRemove.url)
+      )
+    );
   };
 
-  const selectAsMainPhoto = (e, photo) => {
-    e.preventDefault();
+  // =========================
+  // SET MAIN PHOTO
+  // =========================
+ const selectAsMainPhoto = (e, photo) => {
+  e.preventDefault();
 
-    const photoUrl = typeof photo === "string" ? photo : photo.url;
+  const photoUrl = typeof photo === "string" ? photo : photo.url;
 
-    const updatedPhotos = [
-      addedPhotos.find(
-        (p) => (typeof p === "string" ? p : p.url) === photoUrl
-      ),
-      ...addedPhotos.filter(
-        (p) => (typeof p === "string" ? p : p.url) !== photoUrl
-      ),
-    ];
+  // ✅ SET COVER PHOTO (MAIN THUMBNAIL)
+  setCoverPhoto(photoUrl);
 
-    setAddedPhotos(updatedPhotos);
+  // ❌ OPTIONAL: remove reordering completely
+  // (recommended — cleaner logic)
+
+  // // If you STILL want reorder, keep below:
+  // const updatedPhotos = [
+  //   addedPhotos.find(
+  //     (p) => (typeof p === "string" ? p : p.url) === photoUrl
+  //   ),
+  //   ...addedPhotos.filter(
+  //     (p) => (typeof p === "string" ? p : p.url) !== photoUrl
+  //   ),
+  // ];
+
+  // setAddedPhotos(updatedPhotos);
+};
+
+  // =========================
+  // UPDATE CATEGORY ✅ FIXED
+  // =========================
+  const updateCategory = (index, value) => {
+    setAddedPhotos((prev) =>
+      prev.map((p, i) =>
+        i === index
+          ? { ...p, category: value }
+          : p
+      )
+    );
   };
 
   return (
@@ -742,6 +1045,7 @@ const PhotosUploader = ({ id, addedPhotos, setAddedPhotos }) => {
           placeholder="Add using a link ...jpg"
         />
         <button
+          type="button"
           className="rounded-2xl bg-gray-200 px-4"
           onClick={addPhotoByLink}
         >
@@ -753,11 +1057,14 @@ const PhotosUploader = ({ id, addedPhotos, setAddedPhotos }) => {
       <div className="mt-4 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
         {addedPhotos?.length > 0 &&
           addedPhotos.map((photo, index) => {
-            const photoUrl = typeof photo === "string" ? photo : photo.url;
+            const photoUrl =
+              typeof photo === "string" ? photo : photo.url;
 
             return (
-              <div key={index} className="bg-white border rounded-xl p-2 shadow-sm">
-
+              <div
+                key={photo.public_id || photoUrl}
+                className="bg-white border rounded-xl p-2 shadow-sm"
+              >
                 {/* IMAGE */}
                 <div className="relative">
                   <Image
@@ -766,9 +1073,10 @@ const PhotosUploader = ({ id, addedPhotos, setAddedPhotos }) => {
                     className="w-full h-32 object-cover rounded-lg"
                   />
 
-                  {/* REMOVE BUTTON */}
+                  {/* REMOVE BUTTON ✅ FIXED */}
                   <button
-                    onClick={() => removePhoto(index)}
+                    type="button"
+                    onClick={() => removePhoto(photo)}
                     className="absolute top-2 right-2 bg-black/60 text-white rounded-full px-2 py-1 text-xs"
                   >
                     ✕
@@ -776,6 +1084,7 @@ const PhotosUploader = ({ id, addedPhotos, setAddedPhotos }) => {
 
                   {/* MAIN PHOTO STAR */}
                   <button
+                    type="button"
                     onClick={(e) => selectAsMainPhoto(e, photo)}
                     className="absolute bottom-2 left-2 bg-black/60 text-white rounded-full p-1"
                   >
@@ -810,14 +1119,12 @@ const PhotosUploader = ({ id, addedPhotos, setAddedPhotos }) => {
                   </button>
                 </div>
 
-                {/* CATEGORY DROPDOWN */}
+                {/* CATEGORY */}
                 <select
                   value={photo.category || ""}
-                  onChange={(e) => {
-                    const updated = [...addedPhotos];
-                    updated[index].category = e.target.value;
-                    setAddedPhotos(updated);
-                  }}
+                  onChange={(e) =>
+                    updateCategory(index, e.target.value)
+                  }
                   className="border rounded-md w-full mt-2 p-1 text-sm"
                 >
                   <option value="">Select category</option>
@@ -832,7 +1139,12 @@ const PhotosUploader = ({ id, addedPhotos, setAddedPhotos }) => {
 
         {/* UPLOAD BUTTON */}
         <label className="flex h-32 cursor-pointer items-center justify-center gap-1 rounded-2xl border text-2xl text-gray-600">
-          <input type="file" multiple className="hidden" onChange={uploadPhoto} />
+          <input
+            type="file"
+            multiple
+            className="hidden"
+            onChange={uploadPhoto}
+          />
           Upload
         </label>
       </div>

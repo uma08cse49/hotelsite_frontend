@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
-import { useRef } from "react";
+import { useRef,useEffect } from "react";
 
 
 const PlaceGallery = ({ place }) => {
@@ -13,36 +13,65 @@ const PlaceGallery = ({ place }) => {
 
   const [selectedPhoto, setSelectedPhoto] = useState(null);
 
+
+  const validPhotos = place.photos?.filter(
+  (p) => p?.url && p.url.includes("res.cloudinary.com")
+);
+
   const scrollToSection = (category) => {
 
   sectionRefs.current[category]?.scrollIntoView({
     behavior: "smooth"
   });
-
-  const handleScroll = () => {
-
-    const sections = Object.keys(sectionRefs.current);
-
-    sections.forEach((category) => {
-
-      const section = sectionRefs.current[category];
-
-      if (!section) return;
-
-      const rect = section.getBoundingClientRect();
-
-      if (rect.top <= 200 && rect.bottom >= 200) {
-        setActiveCategory(category);
-      }
-
-    });
-    window.addEventListener("scroll", handleScroll);
-
-  return () => window.removeEventListener("scroll", handleScroll);
-
 }
-  };
+
   
+
+//   const handleScroll = () => {
+
+//     const sections = Object.keys(sectionRefs.current);
+
+//     sections.forEach((category) => {
+
+//       const section = sectionRefs.current[category];
+
+//       if (!section) return;
+
+//       const rect = section.getBoundingClientRect();
+
+//       if (rect.top <= 200 && rect.bottom >= 200) {
+//         setActiveCategory(category);
+//       }
+
+//     });
+//     window.addEventListener("scroll", handleScroll);
+
+//   return () => window.removeEventListener("scroll", handleScroll);
+
+// }
+
+    useEffect(() => {
+      const handleScroll = () => {
+        const sections = Object.keys(sectionRefs.current);
+
+        sections.forEach((category) => {
+          const section = sectionRefs.current[category];
+          if (!section) return;
+
+          const rect = section.getBoundingClientRect();
+
+          if (rect.top <= 200 && rect.bottom >= 200) {
+            setActiveCategory(category);
+          }
+        });
+      };
+
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+      // };
+      
 
   if (showAllPhotos) {
 
@@ -59,87 +88,6 @@ const PlaceGallery = ({ place }) => {
   }, {});
 
     return (
-    //   <div className="fixed inset-0 z-20 overflow-auto bg-white text-white">
-    //     {/* <div className="grid gap-4 bg-white px-2 py-20 md:p-8"> */}
-    //     <div className="grid gap-6 bg-white px-4 py-24 md:px-20">
-    //       <div>
-    //         <button
-    //           className="fixed right-2 top-8 flex gap-1 rounded-2xl bg-white py-2 px-4 text-black shadow-sm shadow-gray-500 md:right-12"
-    //           onClick={() => setShowAllPhotos(false)}
-    //         >
-    //           <svg
-    //             xmlns="http://www.w3.org/2000/svg"
-    //             viewBox="0 0 24 24"
-    //             fill="currentColor"
-    //             className="h-6 w-6"
-    //           >
-    //             <path
-    //               fillRule="evenodd"
-    //               d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
-    //               clipRule="evenodd"
-    //             />
-    //           </svg>
-    //           Close photos
-    //         </button>
-    //       </div>
-    //       {place?.photos?.length > 0 &&
-    //         place.photos.map((photo, index) => (
-    //           <div key={index} className="max-w-full">
-    //             {/* <Image src={photo} /> */}
-    //             {/* <img src={photo.url} alt="" /> */}
-    //             <img
-    //               src={photo.url}
-    //               alt=""
-    //               className="w-full rounded-xl object-cover"
-    //             />
-    //           </div>
-    //         ))}
-    //     </div>
-    //   </div>
-
-  //   <div className="fixed inset-0 z-50 overflow-auto bg-white">
-
-  //     <button
-  //       className="fixed right-6 top-6 bg-white px-4 py-2 rounded-xl shadow"
-  //       onClick={() => setShowAllPhotos(false)}
-  //     >
-  //       Close photos
-  //     </button>
-
-  //     <div className="max-w-6xl mx-auto pt-24 px-6">
-
-  //       {Object.entries(groupedPhotos).map(([category, photos]) => (
-
-  //         <div key={category} className="mb-16">
-
-  //           {/* CATEGORY TITLE */}
-  //           <h2 className="text-2xl font-semibold mb-6">
-  //             {category}
-  //           </h2>
-
-  //           {/* PHOTO GRID */}
-  //           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-
-  //             {photos.map((photo, index) => (
-
-  //               <img
-  //                 key={index}
-  //                 src={photo.url}
-  //                 className="rounded-xl w-full object-cover"
-  //               />
-
-  //             ))}
-
-  //           </div>
-
-  //         </div>
-
-  //       ))}
-
-  //     </div>
-
-  //   </div>
-
   <div className="fixed inset-0 z-50 bg-white overflow-auto">
 
   <button
@@ -192,7 +140,7 @@ const PlaceGallery = ({ place }) => {
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
 
-            {photos.map((photo, index) => (
+            {/* {photos.map((photo, index) => (
 
               <img
                 key={index}
@@ -201,6 +149,20 @@ const PlaceGallery = ({ place }) => {
                 onClick={() => setSelectedPhoto(photo.url)}
               />
 
+            ))} */}
+
+            {photos
+              .filter((p) => p?.url && p.url.includes("res.cloudinary.com"))
+              .map((photo, index) => (
+                <img
+                  key={index}
+                  src={photo.url}
+                  className="rounded-xl w-full object-cover"
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                  }}
+                  onClick={() => setSelectedPhoto(photo.url)}
+                />
             ))}
 
           </div>
@@ -251,7 +213,13 @@ const PlaceGallery = ({ place }) => {
               <img
                 onClick={() => setShowAllPhotos(true)}
                 className="h-full w-full cursor-pointer object-cover"
-                src={place.photos[0].url}
+                // src={place.photos[0].url}
+                src={validPhotos?.[0]?.url}
+                onError={(e) => {
+                    e.target.onerror = null; // ✅ prevent infinite loop
+                    e.target.src = "https://placehold.co/600x400";
+                    // e.target.src = "/no-image.jpg";
+                }}
                 alt=""
               />
             </div>
@@ -267,7 +235,12 @@ const PlaceGallery = ({ place }) => {
                 <img
                   onClick={() => setShowAllPhotos(true)}
                   className="h-full w-full cursor-pointer object-cover"
-                  src={place.photos[1].url}
+                  // src={place.photos[1].url}
+                  src={validPhotos?.[1]?.url}
+                  onError={(e) => {
+                    // e.target.src = "https://via.placeholder.com/600x400";
+                    e.target.src = "https://placehold.co/600x400";
+                  }}
                   alt=""
                 />
               </div>
@@ -280,7 +253,12 @@ const PlaceGallery = ({ place }) => {
                 <img
                   onClick={() => setShowAllPhotos(true)}
                   className="h-full w-full cursor-pointer object-cover"
-                  src={place.photos[2].url}
+                  // src={place.photos[2].url}
+                  src={validPhotos?.[2]?.url}
+                  onError={(e) => {
+                    // e.target.src = "https://via.placeholder.com/600x400";
+                    e.target.src = "https://placehold.co/600x400";
+                  }}
                   alt=""
                 />
               </div>
@@ -297,7 +275,12 @@ const PlaceGallery = ({ place }) => {
                 <img
                   onClick={() => setShowAllPhotos(true)}
                   className="h-full w-full cursor-pointer object-cover"
-                  src={place.photos[3].url}
+                  // src={place.photos[3].url}
+                  src={validPhotos?.[3]?.url}
+                  onError={(e) => {
+                    // e.target.src = "https://via.placeholder.com/600x400";
+                    e.target.src = "https://placehold.co/600x400";
+                  }}
                   alt=""
                 />
               </div>
@@ -309,7 +292,12 @@ const PlaceGallery = ({ place }) => {
                 <img
                   onClick={() => setShowAllPhotos(true)}
                   className="h-full w-full cursor-pointer object-cover"
-                  src={place.photos[4].url}
+                  // src={place.photos[4].url}
+                  src={validPhotos?.[4]?.url}
+                  onError={(e) => {
+                    // e.target.src = "https://via.placeholder.com/600x400";
+                    e.target.src = "https://placehold.co/600x400";
+                  }}
                   alt=""
                 />
               </div>
@@ -325,7 +313,12 @@ const PlaceGallery = ({ place }) => {
             <img
               onClick={() => setShowAllPhotos(true)}
               className="h-full cursor-pointer object-cover"
-              src={place.photos[0].url}
+              // src={place.photos[0].url}
+              src={validPhotos?.[0]?.url}
+              onError={(e) => {
+                // e.target.src = "https://via.placeholder.com/600x400";
+                e.target.src = "https://placehold.co/600x400";
+              }}
               alt=""
             />
           </div>
